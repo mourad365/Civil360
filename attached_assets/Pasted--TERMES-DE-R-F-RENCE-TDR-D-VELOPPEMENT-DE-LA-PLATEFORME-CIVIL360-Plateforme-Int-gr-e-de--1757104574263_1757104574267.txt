@@ -1,0 +1,298 @@
+# TERMES DE RÉFÉRENCE (TDR)
+## DÉVELOPPEMENT DE LA PLATEFORME CIVIL360
+### Plateforme Intégrée de Gestion de l'Exécution des Projets de Génie Civil
+
+## LEXIQUE ET DÉFINITIONS
+- **Bureau d'exécution** : Structure chargée de la réalisation concrète des projets de génie civil sur chantiers
+- **Dashboard** : Tableau de bord visuel présentant les indicateurs clés de performance (KPIs) en temps réel
+- **ERP** (Enterprise Resource Planning) : Progiciel de gestion intégré permettant de gérer l'ensemble des processus d'une entreprise
+- **Géolocalisation** : Procédé permettant de positionner un objet sur une carte à partir de ses coordonnées géographiques
+- **IoT** (Internet of Things) : Objets connectés permettant la collecte de données en temps réel
+- **KPI** (Key Performance Indicator) : Indicateur clé de performance permettant de mesurer l'efficacité d'une action
+- **SaaS** (Software as a Service) : Modèle de distribution de logiciels où les applications sont hébergées dans le cloud
+- **WebSocket** : Protocole de communication bidirectionnelle en temps réel entre client et serveur
+
+## 1. CONTEXTE ET JUSTIFICATION
+
+### 1.1 Contexte Général
+Les bureaux d'exécution en génie civil font face à des défis opérationnels majeurs dans la gestion quotidienne des chantiers, la coordination des équipes, le suivi des approvisionnements et la maîtrise des délais. La multiplicité des intervenants et la complexité logistique génèrent des inefficacités coûteuses.
+
+### 1.2 Problématiques Identifiées
+- **Coordination chantiers** : Communication défaillante entre équipes sur site
+- **Suivi temps réel** : Manque de visibilité sur l'avancement réel des travaux
+- **Gestion des ressources** : Mauvaise allocation des équipements et matériaux
+- **Contrôle qualité** : Traçabilité insuffisante des contrôles et non-conformités
+- **Planification opérationnelle** : Décalages fréquents par manque d'anticipation
+- **Reporting** : Remontées d'information tardives vers la direction
+
+### 1.3 Opportunité Stratégique
+Le développement de CIVIL360 répond au besoin critique des bureaux d'exécution de digitaliser leurs processus opérationnels pour gagner en efficacité, réactivité et rentabilité.
+
+## 2. OBJECTIFS
+
+### 2.1 Objectif Général
+Développer une plateforme web intégrée permettant la gestion centralisée et optimisée de l'exécution des projets de génie civil, du démarrage chantier à la réception des travaux.
+
+### 2.2 Objectifs Spécifiques
+
+#### 2.2.1 Objectifs Opérationnels
+- Centraliser le pilotage des chantiers en cours
+- Optimiser la gestion des équipes et équipements
+- Assurer la traçabilité qualité et conformité
+- Faciliter la communication inter-équipes
+- Automatiser le reporting d'avancement
+
+#### 2.2.2 Objectifs de Performance
+- Réduire les retards de livraison de 20% minimum
+- Améliorer la productivité des équipes de 25%
+- Réduire les coûts de non-qualité de 30%
+- Optimiser l'utilisation des équipements de 35%
+- Diminuer les temps de reporting de 50%
+
+#### 2.2.3 Objectifs Technologiques
+- Développer une solution mobile-first pour utilisation chantier
+- Assurer la synchronisation offline/online
+- Intégrer les technologies IoT pour suivi automatique
+- Implémenter des outils de géolocalisation avancés
+
+## 3. CARACTÉRISTIQUES FONCTIONNELLES
+
+### 3.1 Module Direction Exécution - Pilotage Multi-Chantiers
+
+#### 3.1.1 Tableau de bord opérationnel
+- Vue d'ensemble temps réel de tous les chantiers
+- Cartographie interactive avec statuts chantiers
+- Alertes prioritaires et points de blocage
+- Indicateurs de performance consolidés
+- Prévisions d'achèvement par projet
+
+#### 3.1.2 Gestion des ressources humaines
+- Planning des équipes multi-chantiers
+- Suivi des présences et heures travaillées
+- Compétences et certifications du personnel
+- Affectation optimisée selon disponibilités
+- Gestion des remplacements et renforcements
+
+### 3.2 Module Chef de Chantier - Coordination Opérationnelle
+
+#### 3.2.1 Planification et suivi quotidien
+- Planning détaillé par phase et métier
+- Assignation des tâches aux équipes
+- Suivi d'avancement en temps réel
+- Gestion des aléas et reports
+- Interface météo pour ajustements
+
+#### 3.2.2 Contrôle qualité intégré
+- Check-lists qualité par type d'ouvrage
+- Photos géolocalisées avec horodatage
+- Gestion des non-conformités et reprises
+- Traçabilité des contrôles réglementaires
+- Validation des réceptions d'ouvrages
+
+#### 3.2.3 Gestion des approvisionnements chantier
+- Suivi des livraisons et réceptions
+- Contrôle conformité matériaux
+- Gestion des stocks chantier
+- Demandes d'approvisionnement urgentes
+- Interface avec fournisseurs locaux
+
+### 3.3 Module Logistique - Gestion du Parc et Équipements
+
+#### 3.3.1 Suivi des équipements
+- Géolocalisation GPS temps réel
+- État et disponibilité des machines
+- Planification des transferts
+- Maintenance préventive et curative
+- Gestion des pannes et réparations
+
+#### 3.3.2 Optimisation logistique
+- Algorithmes d'allocation optimale
+- Prévision des besoins par chantier
+- Gestion des locations temporaires
+- Interface avec transporteurs
+- Suivi consommations carburant
+
+### 3.4 Module Approvisionnements - Achats et Stocks
+
+#### 3.4.1 Gestion des commandes urgentes
+- Demandes d'achat simplifiées depuis chantier
+- Validation workflow accélérée
+- Catalogue fournisseurs locaux
+- Suivi livraisons en temps réel
+- Gestion des réclamations
+
+#### 3.4.2 Optimisation des stocks
+- Inventaires temps réel multi-sites
+- Alertes de rupture et sur-stock
+- Transferts inter-chantiers automatisés
+- Prévisions de consommation
+- Valorisation des stocks
+
+### 3.5 Module Contrôle de Gestion - Suivi Performance
+
+#### 3.5.1 Suivi budgétaire opérationnel
+- Coûts réels vs budget par poste
+- Alertes de dépassement
+- Projections d'achèvement
+- Analyse des écarts et causes
+- Propositions d'actions correctives
+
+#### 3.5.2 Reporting et analytics
+- Tableaux de bord personnalisés
+- Rapports d'avancement automatisés
+- Analyses de productivité
+- Benchmarking inter-chantiers
+- Indicateurs prédictifs
+
+## 4. CARACTÉRISTIQUES TECHNIQUES
+
+### 4.1 Architecture Système
+
+#### 4.1.1 Architecture mobile-first
+- Application web responsive
+- Applications mobiles natives iOS/Android
+- Synchronisation offline/online
+- Interface adaptée utilisation chantier
+- Optimisation pour réseaux faibles
+
+#### 4.1.2 Technologies recommandées
+- **Backend** : Node.js/Django avec APIs REST
+- **Frontend** : React Native/Flutter pour mobile
+- **Base de données** : PostgreSQL avec réplication
+- **Infrastructure** : Docker/Kubernetes cloud
+- **Géolocalisation** : Google Maps/Mapbox APIs
+- **IoT** : Intégration capteurs et balises GPS
+
+### 4.2 Performance et Mobilité
+
+#### 4.2.1 Exigences spécifiques chantier
+- Fonctionnement en mode déconnecté
+- Synchronisation automatique reconnexion
+- Interface tactile adaptée équipements protection
+- Résistance conditions environnementales
+- Autonomie batterie optimisée
+
+#### 4.2.2 Intégration IoT et géolocalisation
+- Capteurs présence et activité
+- Balises GPS pour équipements
+- Monitoring environnemental (température, humidité)
+- Détection automatique des mouvements
+- Alertes géofencing
+
+## 5. ORIENTATIONS MÉTHODOLOGIQUES
+
+### 5.1 Approche de Développement Agile
+
+#### 5.1.1 Méthodologie adaptée
+- Sprints courts (1-2 semaines)
+- Tests utilisateurs sur chantiers réels
+- Feedback continu des équipes terrain
+- Déploiement progressif par chantier pilote
+- Formation intégrée au déploiement
+
+#### 5.1.2 Phases de réalisation
+**Phase 1** - Analyse et conception (2 mois)
+- Analyse des processus existants sur chantiers
+- Conception UX/UI adaptée mobilité
+- Architecture technique détaillée
+
+**Phase 2** - Développement MVP (4 mois)
+- Modules core : planning, suivi, reporting
+- Applications mobiles de base
+- Intégrations géolocalisation
+
+**Phase 3** - Pilote terrain (2 mois)
+- Déploiement sur 2-3 chantiers tests
+- Formation équipes pilotes
+- Ajustements basés retours terrain
+
+**Phase 4** - Déploiement généralisé (3 mois)
+- Roll-out progressif tous chantiers
+- Formation générale des utilisateurs
+- Support et optimisation continue
+
+## 6. RÉSULTATS ATTENDUS
+
+### 6.1 Bénéfices Opérationnels Mesurables
+- Réduction des retards de 20% dès la 1ère année
+- Amélioration productivité équipes de 25%
+- Diminution des coûts de non-qualité de 30%
+- Optimisation utilisation équipements de 35%
+- Réduction temps de reporting de 50%
+
+### 6.2 Impacts Organisationnels
+- Digitalisation complète des processus chantier
+- Amélioration de la communication inter-équipes
+- Traçabilité renforcée qualité et conformité
+- Réactivité accrue face aux aléas
+- Culture data-driven dans l'exécution
+
+## 7. CONTRAINTES ET EXIGENCES SPÉCIFIQUES
+
+### 7.1 Contraintes Environnement Chantier
+- Résistance aux conditions climatiques
+- Interface utilisable avec équipements protection
+- Fonctionnement sur réseaux instables
+- Autonomie énergétique suffisante
+- Robustesse des équipements mobiles
+
+### 7.2 Sécurité et Conformité
+- Données hébergées en France/UE
+- Conformité RGPD stricte
+- Sécurisation accès multi-niveaux
+- Audit trail complet des actions
+- Chiffrement end-to-end
+
+### 7.3 Formation et Accompagnement
+- Formation pratique sur chantiers
+- Support technique dédié chantiers
+- Documentation adaptée profils utilisateurs
+- Accompagnement changement organisationnel
+- Hotline technique 6j/7
+
+## 8. LIVRABLES ATTENDUS
+
+### 8.1 Livrables Techniques
+- Plateforme web complète opérationnelle
+- Applications mobiles iOS/Android
+- APIs d'intégration documentées
+- Infrastructure cloud sécurisée
+- Outils d'administration et monitoring
+
+### 8.2 Livrables Formation
+- Modules de formation par profil utilisateur
+- Documentation technique complète
+- Guides d'utilisation terrain illustrés
+- Vidéos tutorielles contextualisées
+- Support de formation formateurs internes
+
+### 8.3 Livrables Support
+- Procédures de support multi-niveaux
+- Outils de diagnostic à distance
+- Documentation maintenance applicative
+- Plan de montée de version
+- Transfert de compétences équipe interne
+
+## 9. CONDITIONS PARTICULIÈRES
+
+### 9.1 Propriété Intellectuelle
+- Code source : propriété pleine du commanditaire
+- Personnalisations secteur : droits exclusifs
+- Méthodologies développées : cession complète
+- Données chantiers : propriété absolue
+
+### 9.2 Garanties Spécifiques
+- Garantie fonctionnelle : 24 mois
+- Support chantiers : 12 mois inclus
+- Formation équipes : 60h incluses
+- Maintenance corrective : 18 mois
+- Evolutive : forfait annuel négociable
+
+### 9.3 Critères de Sélection Prestataire
+- Expérience projets digitalisation BTP
+- Références bureaux d'exécution similaires
+- Équipe projet incluant experts métier
+- Capacité développement mobile avancé
+- Méthodologie accompagnement changement
+
+Ce document constitue le cahier des charges contractuel pour le développement de CIVIL360, spécifiquement adapté aux besoins opérationnels des bureaux d'exécution en génie civil.

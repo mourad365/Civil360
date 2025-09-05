@@ -1,0 +1,226 @@
+# TERMES DE RÉFÉRENCE (TDR)
+## DÉVELOPPEMENT DE LA PLATEFORME CIVIL360
+### Solution Spécialisée Complémentaire à Odoo pour l'Exécution BTP
+
+## LEXIQUE ET DÉFINITIONS
+- **Odoo** : ERP open-source utilisé pour la gestion administrative, comptable et commerciale
+- **BIM** (Building Information Modeling) : Modélisation 3D intelligente des ouvrages
+- **IoT** (Internet of Things) : Objets connectés pour collecte automatique de données chantier
+- **Computer Vision** : Analyse automatique d'images par intelligence artificielle
+- **Géofencing** : Création de zones géographiques virtuelles avec alertes automatiques
+- **Machine Learning** : Apprentissage automatique pour prédictions et optimisations
+
+## 1. CONTEXTE ET POSITIONNEMENT
+
+### 1.1 Contexte ERP Existant
+L'entreprise utilise déjà Odoo pour :
+- Gestion commerciale et facturation
+- Comptabilité et finances
+- Achats et approvisionnements de base
+- RH et paie
+- CRM clients
+
+### 1.2 Limitations Odoo pour l'Exécution BTP
+Odoo, bien qu'excellent pour la gestion administrative, présente des lacunes critiques pour l'exécution spécialisée BTP :
+
+**Lacunes techniques identifiées :**
+- Absence de traitement automatique des plans CAO/BIM
+- Pas de géolocalisation temps réel des équipements
+- Interface non adaptée à l'utilisation chantier mobile
+- Manque d'outils de contrôle qualité spécialisés BTP
+- Absence d'intégration IoT native
+- Pas d'intelligence artificielle pour prédictions métier
+
+### 1.3 Valeur Ajoutée CIVIL360
+CIVIL360 apporte les fonctionnalités spécialisées BTP qu'Odoo ne peut pas fournir efficacement, tout en s'intégrant parfaitement avec l'ERP existant.
+
+## 2. OBJECTIFS SPÉCIFIQUES
+
+### 2.1 Objectif Général
+Développer une solution spécialisée BTP qui complète Odoo en apportant les fonctionnalités avancées d'exécution que l'ERP standard ne peut pas gérer.
+
+### 2.2 Objectifs de Différenciation vs Odoo
+- **Intelligence artificielle** : Analyse prédictive impossible dans Odoo standard
+- **Mobilité chantier** : Interface terrain robuste vs interface Odoo inadaptée
+- **Automatisation BIM** : Traitement plans impossibles dans Odoo
+- **IoT intégré** : Capteurs temps réel inexistants dans Odoo
+- **Spécialisation métier** : Workflows BTP vs logique généraliste Odoo
+
+## 3. FONCTIONNALITÉS EXCLUSIVES NON-ODOO
+
+### 3.1 Module Intelligence Artificielle - Analyse Prédictive
+
+#### 3.1.1 Reconnaissance automatique de plans
+- **Import plans CAO/BIM** (DWG, IFC, PDF) - *Impossible dans Odoo*
+- **Extraction automatique des quantités** par IA - *Inexistant Odoo*
+- **Détection d'incohérences inter-plans** - *Non géré Odoo*
+- **Calcul automatique des métrés** - *Fonctionnalité absente Odoo*
+- **Mise à jour temps réel des quantitatifs** - *Complexe dans Odoo*
+
+#### 3.1.2 Prédictions intelligentes
+- **Machine Learning pour prévision retards** - *Impossible Odoo standard*
+- **Optimisation automatique des plannings** - *Non natif Odoo*
+- **Prédiction consommation matériaux** - *Basique dans Odoo*
+- **Analyse prédictive des pannes équipements** - *Inexistant Odoo*
+- **Recommandations d'optimisation automatiques** - *Absent Odoo*
+
+### 3.2 Module Mobilité Chantier Avancée
+
+#### 3.2.1 Interface terrain robuste
+- **App mobile native chantier** - *Odoo mobile inadapté chantier*
+- **Mode offline avancé** - *Synchronisation Odoo limitée*
+- **Interface tactile équipements protection** - *Non prévu Odoo*
+- **Résistance conditions extrêmes** - *Interface Odoo fragile*
+- **Optimisation batterie longue durée** - *Non optimisé Odoo*
+
+#### 3.2.2 Fonctionnalités terrain exclusives
+- **Photos géolocalisées horodatées** - *Basique dans Odoo*
+- **Reconnaissance vocale pour saisies** - *Inexistant Odoo*
+- **Signature électronique avancée** - *Limitée Odoo*
+- **Scanner codes-barres/QR optimisé** - *Basique Odoo*
+- **Cartographie offline des chantiers** - *Impossible Odoo*
+
+### 3.3 Module IoT et Capteurs Intelligents
+
+#### 3.3.1 Intégration capteurs temps réel
+- **Géolocalisation GPS équipements** - *Non géré Odoo*
+- **Capteurs présence et activité** - *Inexistant Odoo*
+- **Monitoring environnemental automatique** - *Absent Odoo*
+- **Détection automatique des mouvements** - *Non prévu Odoo*
+- **Alertes géofencing intelligentes** - *Impossible Odoo standard*
+
+#### 3.3.2 Maintenance prédictive IoT
+- **Analyse vibrations équipements** - *Non géré Odoo*
+- **Prédiction pannes par IA** - *Inexistant Odoo*
+- **Optimisation consommations énergétiques** - *Absent Odoo*
+- **Alertes maintenance automatiques** - *Basique Odoo*
+- **Historique de performance IoT** - *Non natif Odoo*
+
+### 3.4 Module Contrôle Qualité Avancé
+
+#### 3.4.1 Computer Vision pour qualité
+- **Analyse automatique photos chantier** - *Impossible Odoo*
+- **Détection défauts par IA** - *Inexistant Odoo*
+- **Mesure automatique dimensions** - *Non géré Odoo*
+- **Comparaison réalisation/plans automatique** - *Absent Odoo*
+- **Score qualité automatique par zone** - *Non prévu Odoo*
+
+#### 3.4.2 Workflows qualité spécialisés
+- **Check-lists intelligentes contextuelles** - *Basique Odoo*
+- **Traçabilité réglementaire BTP** - *Généraliste Odoo*
+- **Génération rapports conformité** - *Limitée Odoo*
+- **Intégration normes françaises BTP** - *Absent Odoo*
+- **Validation multi-niveaux spécialisée** - *Généraliste Odoo*
+
+### 3.5 Module Analytics BTP Avancé
+
+#### 3.5.1 Tableaux de bord métier spécialisés
+- **KPIs BTP temps réel** - *Généralistes dans Odoo*
+- **Cartographie performance par zone** - *Inexistant Odoo*
+- **Analyse comparative chantiers** - *Limitée Odoo*
+- **Prédictions d'achèvement IA** - *Basique Odoo*
+- **Optimisation ressources automatique** - *Non géré Odoo*
+
+#### 3.5.2 Rapports automatisés spécialisés
+- **Rapports chantier photo-documentés** - *Limité Odoo*
+- **Synthèse avancement avec plans** - *Impossible Odoo*
+- **Analyses de productivité par corps d'état** - *Absent Odoo*
+- **Rapports conformité réglementaire** - *Généraliste Odoo*
+- **Dashboard client temps réel** - *Basique Odoo*
+
+## 4. INTÉGRATION AVEC ODOO EXISTANT
+
+### 4.1 Stratégie d'Intégration
+- **APIs bidirectionnelles** pour synchronisation données
+- **SSO unifié** avec authentification Odoo
+- **Conservation workflows administratifs** dans Odoo
+- **Enrichissement données** par CIVIL360
+- **Reporting consolidé** combinant les deux systèmes
+
+### 4.2 Flux de Données
+**Odoo vers CIVIL360 :**
+- Données projets, clients, fournisseurs
+- Budgets et contrats
+- Personnel et équipements
+- Commandes et factures
+
+**CIVIL360 vers Odoo :**
+- Heures chantier et présences
+- Consommations matériaux réelles
+- Avancements pour facturation
+- Données de maintenance équipements
+
+## 5. ARCHITECTURE TECHNIQUE SPÉCIALISÉE
+
+### 5.1 Technologies Avancées Non-Odoo
+- **TensorFlow/PyTorch** pour IA et Computer Vision
+- **React Native/Flutter** pour apps mobiles optimisées
+- **WebRTC** pour communication temps réel chantier
+- **Blockchain** pour traçabilité qualité inaltérable
+- **Edge Computing** pour traitement local données IoT
+
+### 5.2 Infrastructure Spécialisée
+- **Cloud hybride** avec edge computing chantiers
+- **APIs REST/GraphQL** haute performance
+- **Base vectorielle** pour données géospatiales
+- **Stream processing** pour données IoT temps réel
+- **CDN global** pour synchronisation mobile
+
+## 6. VALEUR AJOUTÉE QUANTIFIÉE
+
+### 6.1 ROI Spécifique vs Extension Odoo
+**Coût extension Odoo** : 200K€ + 50K€/an maintenance
+**Limitations majeures** : Pas d'IA, IoT limité, mobile inadapté
+
+**Coût CIVIL360** : 150K€ + 30K€/an maintenance
+**Fonctionnalités exclusives** : IA complète, IoT natif, mobile optimisé
+
+### 6.2 Bénéfices Impossibles dans Odoo
+- **Gain productivité IA** : +40% (vs +5% extension Odoo)
+- **Économies prédictives** : 15% coûts (impossible Odoo standard)
+- **Qualité automatisée** : -50% défauts (vs -10% Odoo)
+- **Mobilité optimisée** : +60% réactivité (vs +10% Odoo mobile)
+
+## 7. LIVRABLES EXCLUSIFS
+
+### 7.1 Composants Non-Reproductibles Odoo
+- **Moteur IA de reconnaissance plans**
+- **SDK IoT construction**
+- **Application mobile chantier optimisée**
+- **Moteur prédictif spécialisé BTP**
+- **Interface Computer Vision**
+
+### 7.2 Intégrations Avancées
+- **Connecteurs APIs Odoo personnalisés**
+- **Middleware de synchronisation temps réel**
+- **Dashboard unifié Odoo + CIVIL360**
+- **SSO avancé avec gestion droits**
+- **Outils de migration données**
+
+## 8. JUSTIFICATION ÉCONOMIQUE
+
+### 8.1 Pourquoi Pas une Extension Odoo ?
+**Limitations techniques :**
+- Architecture Odoo inadaptée traitement IA massif
+- Performance insuffisante pour IoT temps réel
+- Interface mobile non optimisée conditions chantier
+- Manque de flexibilité pour spécialisations BTP
+
+**Limitations économiques :**
+- Développement custom Odoo plus coûteux
+- Maintenance complexe des personnalisations
+- Dépendance version Odoo pour évolutions
+- Risque de régression lors des mises à jour
+
+### 8.2 Avantage Solution Dédiée
+- **Spécialisation complète** métier BTP
+- **Performance optimisée** pour usages chantier
+- **Évolutivité indépendante** d'Odoo
+- **Innovation continue** sans contraintes ERP
+- **Support spécialisé** connaissance métier
+
+## 9. CONCLUSION
+
+CIVIL360 n'est pas un concurrent d'Odoo mais son **complément spécialisé indispensable** pour l'exécution BTP. La solution apporte les 40% de fonctionnalités critiques qu'Odoo ne peut pas fournir efficacement, tout en préservant l'investissement ERP existant.
+
+**Équation de valeur :** Odoo (gestion administrative) + CIVIL360 (exécution spécialisée) = Solution complète optimale pour bureaux d'exécution BTP.
