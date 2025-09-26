@@ -1,13 +1,29 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { mongoStorage } from "./storage-mongo";
 import { insertProjectSchema, insertAiPlanAnalysisSchema, insertIotEquipmentSchema, insertQualityCheckSchema } from "@shared/schema";
+import { authenticateToken, optionalAuth, requireRole } from "./middleware/auth";
+import { uploadSingle, uploadFields, getFileUrl } from "./middleware/upload";
+
+// Import new route modules
+import projectsRouter from './routes/projects';
+import purchasingRouter from './routes/purchasing';
+import equipmentRouter from './routes/equipment';
+import dashboardRouter from './routes/dashboard';
+import notificationsRouter from './routes/notifications';
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Dashboard endpoint
-  app.get("/api/dashboard/stats", async (req, res) => {
+  // Register new comprehensive API routes
+  app.use('/api/projects', projectsRouter);
+  app.use('/api/purchasing', purchasingRouter);
+  app.use('/api/equipment', equipmentRouter);
+  app.use('/api/dashboard', dashboardRouter);
+  app.use('/api/notifications', notificationsRouter);
+
+  // Legacy dashboard endpoint for backward compatibility
+  app.get("/api/dashboard/stats", optionalAuth, async (req, res) => {
     try {
-      const stats = await storage.getDashboardStats();
+      const stats = await mongoStorage.getDashboardStats();
       res.json(stats);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch dashboard stats" });
@@ -15,9 +31,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Projects endpoints
-  app.get("/api/projects", async (req, res) => {
+  app.get("/api/projects", optionalAuth, async (req, res) => {
     try {
-      const projects = await storage.getAllProjects();
+      const projects = await mongoStorage.getAllProjects();
       res.json(projects);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch projects" });
@@ -26,7 +42,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/projects/:id", async (req, res) => {
     try {
-      const project = await storage.getProject(req.params.id);
+      const project = await mongoStorage.getProject(req.params.id);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
@@ -36,19 +52,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/projects", async (req, res) => {
+  app.post("/api/projects", authenticateToken, async (req, res) => {
     try {
       const validatedData = insertProjectSchema.parse(req.body);
-      const project = await storage.createProject(validatedData);
+      const project = await mongoStorage.createProject(validatedData);
       res.status(201).json(project);
     } catch (error) {
       res.status(400).json({ error: "Invalid project data" });
     }
   });
 
-  app.put("/api/projects/:id", async (req, res) => {
+  app.put("/api/projects/:id", authenticateToken, async (req, res) => {
     try {
-      const project = await storage.updateProject(req.params.id, req.body);
+      const project = await mongoStorage.updateProject(req.params.id, req.body);
       res.json(project);
     } catch (error) {
       res.status(500).json({ error: "Failed to update project" });
@@ -56,23 +72,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI Plan Analysis endpoints
-  app.get("/api/ai/analysis", async (req, res) => {
+  app.get("/api/ai/analysis", optionalAuth, async (req, res) => {
     try {
-      const analyses = await storage.getAllAiAnalysis();
+      const analyses = await mongoStorage.getAllAiAnalysis();
       res.json(analyses);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch AI analyses" });
     }
   });
 
-  app.post("/api/ai/analysis", async (req, res) => {
+  app.post("/api/ai/analysis", authenticateToken, async (req, res) => {
     try {
       const validatedData = insertAiPlanAnalysisSchema.parse(req.body);
-      const analysis = await storage.createAiAnalysis(validatedData);
+      const analysis = await mongoStorage.createAiAnalysis(validatedData);
       
       // Simulate AI processing
       setTimeout(async () => {
-        await storage.updateAiAnalysis(analysis.id, {
+        await mongoStorage.updateAiAnalysis(analysis.id, {
           progress: 100,
           status: "completed",
           aiConfidence: "0.952",
@@ -94,7 +110,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put("/api/ai/analysis/:id", async (req, res) => {
     try {
-      const analysis = await storage.updateAiAnalysis(req.params.id, req.body);
+      const analysis = await mongoStorage.updateAiAnalysis(req.params.id, req.body);
       res.json(analysis);
     } catch (error) {
       res.status(500).json({ error: "Failed to update analysis" });
@@ -104,7 +120,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // IoT Equipment endpoints
   app.get("/api/iot/equipment", async (req, res) => {
     try {
-      const equipment = await storage.getAllIotEquipment();
+      const equipment = await mongoStorage.getAllIotEquipment();
       res.json(equipment);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch IoT equipment" });
@@ -114,7 +130,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/iot/equipment", async (req, res) => {
     try {
       const validatedData = insertIotEquipmentSchema.parse(req.body);
-      const equipment = await storage.createIotEquipment(validatedData);
+      const equipment = await mongoStorage.createIotEquipment(validatedData);
       res.status(201).json(equipment);
     } catch (error) {
       res.status(400).json({ error: "Invalid equipment data" });
@@ -123,7 +139,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put("/api/iot/equipment/:id", async (req, res) => {
     try {
-      const equipment = await storage.updateIotEquipment(req.params.id, req.body);
+      const equipment = await mongoStorage.updateIotEquipment(req.params.id, req.body);
       res.json(equipment);
     } catch (error) {
       res.status(500).json({ error: "Failed to update equipment" });
@@ -133,7 +149,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Simulate real-time IoT updates
   app.post("/api/iot/simulate-update", async (req, res) => {
     try {
-      const equipment = await storage.getAllIotEquipment();
+      const equipment = await mongoStorage.getAllIotEquipment();
       const randomEquipment = equipment[Math.floor(Math.random() * equipment.length)];
       
       if (randomEquipment) {
@@ -141,13 +157,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           utilization: Math.floor(Math.random() * 100),
           batteryLevel: Math.max(10, randomEquipment.batteryLevel! - Math.floor(Math.random() * 5)),
           sensorData: {
-            ...randomEquipment.sensorData,
+            ...(randomEquipment.sensorData || {}),
             temperature: Math.floor(Math.random() * 40) + 30,
             lastReading: new Date().toISOString()
           }
         };
         
-        await storage.updateIotEquipment(randomEquipment.id, updates);
+        await mongoStorage.updateIotEquipment(randomEquipment.id, updates);
       }
       
       res.json({ success: true });
@@ -159,7 +175,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Quality Control endpoints
   app.get("/api/quality/checks", async (req, res) => {
     try {
-      const checks = await storage.getAllQualityChecks();
+      const checks = await mongoStorage.getAllQualityChecks();
       res.json(checks);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch quality checks" });
@@ -180,7 +196,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         aiScore
       };
       
-      const check = await storage.createQualityCheck(checkData);
+      const check = await mongoStorage.createQualityCheck(checkData);
       res.status(201).json(check);
     } catch (error) {
       res.status(400).json({ error: "Invalid quality check data" });
@@ -190,7 +206,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Mobile sync endpoints
   app.get("/api/mobile/sync-queue", async (req, res) => {
     try {
-      const queue = await storage.getMobileSyncQueue();
+      const queue = await mongoStorage.getMobileSyncQueue();
       res.json(queue);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch mobile sync queue" });
@@ -200,7 +216,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Odoo integration endpoints
   app.get("/api/odoo/sync-status", async (req, res) => {
     try {
-      const syncStatus = await storage.getOdooSyncStatus();
+      const syncStatus = await mongoStorage.getOdooSyncStatus();
       res.json(syncStatus);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch Odoo sync status" });
@@ -213,7 +229,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Simulate Odoo sync process
       setTimeout(async () => {
-        // Update sync status in storage
+        // Update sync status in mongoStorage
         console.log(`Odoo sync triggered for ${entityType}`);
       }, 1000);
       
@@ -226,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Predictions endpoints
   app.get("/api/predictions/:projectId", async (req, res) => {
     try {
-      const predictions = await storage.getProjectPredictions(req.params.projectId);
+      const predictions = await mongoStorage.getProjectPredictions(req.params.projectId);
       res.json(predictions);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch predictions" });
@@ -234,11 +250,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // File upload simulation for AI plan analysis
-  app.post("/api/ai/upload-plan", async (req, res) => {
+  app.post("/api/ai/upload-plan", authenticateToken, uploadSingle('planFile'), async (req, res) => {
     try {
       const { fileName, fileSize, fileType, projectId } = req.body;
       
-      const analysis = await storage.createAiAnalysis({
+      const analysis = await mongoStorage.createAiAnalysis({
         fileName,
         fileSize,
         fileType,
@@ -253,7 +269,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           progress = 100;
           clearInterval(progressInterval);
           
-          await storage.updateAiAnalysis(analysis.id, {
+          await mongoStorage.updateAiAnalysis(analysis.id, {
             progress: 100,
             status: "completed",
             aiConfidence: (Math.random() * 0.2 + 0.8).toFixed(3),
@@ -267,7 +283,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           });
         } else {
-          await storage.updateAiAnalysis(analysis.id, { progress });
+          await mongoStorage.updateAiAnalysis(analysis.id, { progress });
         }
       }, 2000);
 

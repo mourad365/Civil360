@@ -11,12 +11,20 @@ import { Building, Users, AlertTriangle, TrendingUp, Lightbulb, Clock } from "lu
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import type { AiPlanAnalysis, IoTEquipment, QualityCheck as QualityCheckType, OdooSync as OdooSyncType } from "@shared/schema";
+
+interface DashboardStats {
+  activeProjects: number;
+  activeTeams: number;
+  qualityAlerts: number;
+  productivityGain: number;
+}
 
 export default function Dashboard() {
   const [selectedProject, setSelectedProject] = useState<string>("");
   const { toast } = useToast();
 
-  const { data: stats, isLoading: statsLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery<DashboardStats>({
     queryKey: ["/api/dashboard/stats"],
   });
 
@@ -24,19 +32,19 @@ export default function Dashboard() {
     queryKey: ["/api/projects"],
   });
 
-  const { data: aiAnalyses = [] } = useQuery({
+  const { data: aiAnalyses = [] } = useQuery<AiPlanAnalysis[]>({
     queryKey: ["/api/ai/analysis"],
   });
 
-  const { data: iotEquipment = [] } = useQuery({
+  const { data: iotEquipment = [] } = useQuery<IoTEquipment[]>({
     queryKey: ["/api/iot/equipment"],
   });
 
-  const { data: qualityChecks = [] } = useQuery({
+  const { data: qualityChecks = [] } = useQuery<QualityCheckType[]>({
     queryKey: ["/api/quality/checks"],
   });
 
-  const { data: odooSyncStatus = [] } = useQuery({
+  const { data: odooSyncStatus = [] } = useQuery<OdooSyncType[]>({
     queryKey: ["/api/odoo/sync-status"],
   });
 
@@ -99,32 +107,32 @@ export default function Dashboard() {
           title="Chantiers Actifs"
           value={stats?.activeProjects || 0}
           description="+2 ce mois"
-          icon={<Building className="h-6 w-6 text-green-600" />}
-          iconBgColor="bg-green-100 dark:bg-green-900"
+          icon={<Building className="h-6 w-6 text-white" />}
+          iconBgColor="bg-construction-safety-green"
         />
         
         <KPICard
           title="Équipes sur Site"
           value={stats?.activeTeams || 0}
           description="94% présence"
-          icon={<Users className="h-6 w-6 text-blue-600" />}
-          iconBgColor="bg-blue-100 dark:bg-blue-900"
+          icon={<Users className="h-6 w-6 text-white" />}
+          iconBgColor="bg-construction-steel"
         />
         
         <KPICard
           title="Alertes Qualité"
           value={stats?.qualityAlerts || 0}
           description="-3 vs hier"
-          icon={<AlertTriangle className="h-6 w-6 text-orange-600" />}
-          iconBgColor="bg-orange-100 dark:bg-orange-900"
+          icon={<AlertTriangle className="h-6 w-6 text-white" />}
+          iconBgColor="bg-construction-warning"
         />
         
         <KPICard
           title="Productivité IA"
           value={`+${stats?.productivityGain || 0}%`}
           description="vs dernière période"
-          icon={<TrendingUp className="h-6 w-6 text-purple-600" />}
-          iconBgColor="bg-purple-100 dark:bg-purple-900"
+          icon={<TrendingUp className="h-6 w-6 text-white" />}
+          iconBgColor="bg-construction-orange"
         />
       </div>
 
@@ -192,7 +200,7 @@ export default function Dashboard() {
             </p>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
-            {iotEquipment.slice(0, 3).map((equipment) => (
+            {iotEquipment.slice(0, 3).map((equipment: IoTEquipment) => (
               <IoTDevice
                 key={equipment.id}
                 equipment={equipment}
@@ -211,7 +219,7 @@ export default function Dashboard() {
             </p>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
-            {qualityChecks.slice(0, 2).map((check) => (
+            {qualityChecks.slice(0, 2).map((check: QualityCheckType) => (
               <QualityCheck
                 key={check.id}
                 check={check}

@@ -28,20 +28,26 @@ export default function QualityCheck({ check, onCreateNonConformity }: QualityCh
     switch (check.status) {
       case "passed":
         return (
-          <Badge className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+          <Badge className="bg-quality-passed/20 text-quality-passed border-quality-passed/30 font-semibold">
             ✓ Conforme
           </Badge>
         );
       case "failed":
         return (
-          <Badge className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+          <Badge className="bg-quality-failed/20 text-quality-failed border-quality-failed/30 font-semibold">
             ⚠ Non-conforme
           </Badge>
         );
       case "pending":
         return (
-          <Badge className="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200">
+          <Badge className="bg-quality-pending/20 text-quality-pending border-quality-pending/30 font-semibold">
             ⏳ En attente
+          </Badge>
+        );
+      case "review":
+        return (
+          <Badge className="bg-quality-review/20 text-quality-review border-quality-review/30 font-semibold">
+            📋 Révision
           </Badge>
         );
       default:
@@ -62,15 +68,23 @@ export default function QualityCheck({ check, onCreateNonConformity }: QualityCh
 
   return (
     <Card className={cn(
-      "overflow-hidden",
-      check.status === "failed" ? "border-orange-200 bg-orange-50 dark:bg-orange-950" : "border-border"
+      "construction-card overflow-hidden shadow-md hover:shadow-lg transition-all duration-300",
+      check.status === "failed" ? "border-quality-failed/30 bg-quality-failed/5" : 
+      check.status === "passed" ? "border-quality-passed/30 bg-quality-passed/5" :
+      check.status === "pending" ? "border-quality-pending/30 bg-quality-pending/5" :
+      "border-border"
     )}>
       {check.imageUrl && (
-        <img 
-          src={check.imageUrl} 
-          alt={`Contrôle qualité - ${check.location}`}
-          className="w-full h-48 object-cover"
-        />
+        <div className="relative overflow-hidden">
+          <img 
+            src={check.imageUrl} 
+            alt={`Contrôle qualité - ${check.location}`}
+            className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+          />
+          <div className="absolute top-3 right-3">
+            {getStatusIcon()}
+          </div>
+        </div>
       )}
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-3">

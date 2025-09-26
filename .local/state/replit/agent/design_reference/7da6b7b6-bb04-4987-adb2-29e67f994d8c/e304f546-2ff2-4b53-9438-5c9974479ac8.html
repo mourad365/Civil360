@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIVIL360 - Plateforme BTP Intelligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    popover: {
+                        DEFAULT: "var(--popover)",
+                        foreground: "var(--popover-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                    chart: {
+                        "1": "var(--chart-1)",
+                        "2": "var(--chart-2)",
+                        "3": "var(--chart-3)",
+                        "4": "var(--chart-4)",
+                        "5": "var(--chart-5)",
+                    }
+                },
+                fontFamily: {
+                    sans: ["var(--font-sans)"],
+                }
+            },
+        }
+    };
+    </script>
+    <style>
+        :root {
+            --background: hsl(0 0% 98%);
+            --foreground: hsl(222 47% 11%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222 47% 11%);
+            --popover: hsl(0 0% 100%);
+            --popover-foreground: hsl(222 47% 11%);
+            --primary: hsl(222 84% 45%);
+            --primary-foreground: hsl(0 0% 98%);
+            --secondary: hsl(45 93% 47%);
+            --secondary-foreground: hsl(222 47% 11%);
+            --muted: hsl(222 13% 96%);
+            --muted-foreground: hsl(222 13% 45%);
+            --accent: hsl(45 93% 47%);
+            --accent-foreground: hsl(222 47% 11%);
+            --destructive: hsl(0 84% 60%);
+            --destructive-foreground: hsl(0 0% 98%);
+            --border: hsl(222 13% 90%);
+            --input: hsl(222 13% 90%);
+            --ring: hsl(222 84% 45%);
+            --radius: 8px;
+            --font-sans: 'Inter', ui-sans-serif, system-ui;
+            --chart-1: hsl(222 84% 45%);
+            --chart-2: hsl(45 93% 47%);
+            --chart-3: hsl(142 76% 36%);
+            --chart-4: hsl(0 84% 60%);
+            --chart-5: hsl(271 81% 56%);
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        .offline-indicator {
+            animation: pulse 2s infinite;
+        }
+        
+        .ai-processing {
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .iot-pulse {
+            animation: iot-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes iot-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="h-full bg-background font-sans">
+    <!-- @COMPONENT: MainLayout -->
+    <div class="flex h-screen bg-background">
+        <!-- @COMPONENT: Sidebar -->
+        <div class="hidden lg:flex lg:w-80 lg:flex-col">
+            <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto bg-card border-r border-border">
+                <div class="flex items-center flex-shrink-0 px-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-hard-hat text-primary-foreground text-lg"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h1 class="text-xl font-bold text-foreground">CIVIL360</h1>
+                            <p class="text-xs text-muted-foreground">Plateforme BTP Intelligente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Connection Status -->
+                <div class="px-4 mt-4">
+                    <div class="flex items-center p-3 bg-muted rounded-lg">
+                        <div class="w-3 h-3 bg-green-500 rounded-full iot-pulse"></div>
+                        <span class="ml-2 text-sm font-medium text-foreground">En ligne - Sync activée</span>
+                    </div>
+                </div>
+                
+                <nav class="mt-8 flex-1 px-4 space-y-2">
+                    <a href="#dashboard" class="bg-primary text-primary-foreground group flex items-center px-3 py-3 text-sm font-medium rounded-lg">
+                        <i class="fas fa-tachometer-alt mr-3 text-lg"></i>
+                        Tableau de Bord
+                    </a>
+                    <a href="#chantiers" class="text-foreground hover:bg-muted group flex items-center px-3 py-3 text-sm font-medium rounded-lg">
+                        <i class="fas fa-building mr-3 text-lg"></i>
+                        Chantiers Actifs
+                        <span class="ml-auto bg-secondary text-secondary-foreground px-2 py-1 text-xs rounded-full">12</span>
+                    </a>
+                    <a href="#ai-plans" class="text-foreground hover:bg-muted group flex items-center px-3 py-3 text-sm font-medium rounded-lg">
+                        <i class="fas fa-brain mr-3 text-lg"></i>
+                        IA Analyse Plans
+                        <span class="ml-auto bg-green-100 text-green-800 px-2 py-1 text-xs rounded-full">3 en cours</span>
+                    </a>
+                    <a href="#iot" class="text-foreground hover:bg-muted group flex items-center px-3 py-3 text-sm font-medium rounded-lg">
+                        <i class="fas fa-satellite-dish mr-3 text-lg"></i>
+                        IoT Équipements
+                        <span class="ml-auto bg-blue-100 text-blue-800 px-2 py-1 text-xs rounded-full">247 actifs</span>
+                    </a>
+                    <a href="#quality" class="text-foreground hover:bg-muted group flex items-center px-3 py-3 text-sm font-medium rounded-lg">
+                        <i class="fas fa-camera mr-3 text-lg"></i>
+                        Contrôle Qualité
+                    </a>
+                    <a href="#mobile" class="text-foreground hover:bg-muted group flex items-center px-3 py-3 text-sm font-medium rounded-lg">
+                        <i class="fas fa-mobile-alt mr-3 text-lg"></i>
+                        Interface Mobile
+                    </a>
+                    <a href="#odoo" class="text-foreground hover:bg-muted group flex items-center px-3 py-3 text-sm font-medium rounded-lg">
+                        <i class="fas fa-exchange-alt mr-3 text-lg"></i>
+                        Intégration Odoo
+                    </a>
+                </nav>
+                
+                <!-- Odoo Integration Status -->
+                <div class="px-4 py-4 border-t border-border">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-purple-600 rounded flex items-center justify-center">
+                            <i class="fas fa-cog text-white text-sm"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-foreground">Odoo ERP</p>
+                            <p class="text-xs text-green-600">✓ Synchronisé</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- @COMPONENT: MainContent -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- @COMPONENT: TopBar -->
+            <header class="bg-card shadow-sm border-b border-border">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <button class="lg:hidden p-2 rounded-md text-foreground hover:bg-muted">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                            <div>
+                                <h1 class="text-2xl font-bold text-foreground">Dashboard Exécution</h1>
+                                <p class="text-sm text-muted-foreground">Vue d'ensemble temps réel des chantiers</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <!-- AI Status -->
+                            <div class="flex items-center space-x-2 bg-blue-50 px-3 py-2 rounded-lg">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                <span class="text-sm font-medium text-blue-700">IA Active</span>
+                            </div>
+                            <!-- Notifications -->
+                            <button class="relative p-2 text-foreground hover:bg-muted rounded-lg">
+                                <i class="fas fa-bell text-lg"></i>
+                                <span class="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">3</span>
+                            </button>
+                            <!-- User Profile -->
+                            <div class="flex items-center space-x-3">
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-foreground" data-bind="user.name">Marc Dubois</p>
+                                    <p class="text-xs text-muted-foreground">Chef d'Exécution</p>
+                                </div>
+                                <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                    <span class="text-primary-foreground font-medium">MD</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- @END_COMPONENT: TopBar -->
+
+            <!-- @COMPONENT: MainDashboard -->
+            <main class="flex-1 overflow-y-auto bg-background">
+                <div class="p-6 space-y-6">
+                    <!-- KPI Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-card p-6 rounded-lg shadow-sm border border-border">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-green-100 rounded-lg">
+                                    <i class="fas fa-building text-green-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-muted-foreground">Chantiers Actifs</p>
+                                    <p class="text-3xl font-bold text-foreground" data-bind="stats.activeProjects">12</p>
+                                    <p class="text-sm text-green-600">+2 ce mois</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-card p-6 rounded-lg shadow-sm border border-border">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-blue-100 rounded-lg">
+                                    <i class="fas fa-users text-blue-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-muted-foreground">Équipes sur Site</p>
+                                    <p class="text-3xl font-bold text-foreground" data-bind="stats.activeTeams">247</p>
+                                    <p class="text-sm text-blue-600">94% présence</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-card p-6 rounded-lg shadow-sm border border-border">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-orange-100 rounded-lg">
+                                    <i class="fas fa-exclamation-triangle text-orange-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-muted-foreground">Alertes Qualité</p>
+                                    <p class="text-3xl font-bold text-foreground" data-bind="stats.qualityAlerts">8</p>
+                                    <p class="text-sm text-orange-600">-3 vs hier</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-card p-6 rounded-lg shadow-sm border border-border">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-purple-100 rounded-lg">
+                                    <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-muted-foreground">Productivité IA</p>
+                                    <p class="text-3xl font-bold text-foreground">+32%</p>
+                                    <p class="text-sm text-purple-600">vs dernière période</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Plan Analysis Section -->
+                    <div class="bg-card rounded-lg shadow-sm border border-border">
+                        <div class="p-6 border-b border-border">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h2 class="text-xl font-bold text-foreground">IA Analyse de Plans</h2>
+                                    <p class="text-sm text-muted-foreground">Traitement automatique CAO/BIM et extraction de quantités</p>
+                                </div>
+                                <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+                                    <i class="fas fa-upload mr-2"></i>
+                                    Nouveau Plan
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <!-- Plan Processing -->
+                                <div class="space-y-4">
+                                    <h3 class="font-semibold text-foreground">Plans en Traitement</h3>
+                                    
+                                    <!-- @FUNCTIONALITY: This should implement AI plan analysis using computer vision -->
+                                    <div class="border border-border rounded-lg p-4 space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                    <i class="fas fa-file-alt text-blue-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-foreground">Résidence_Les_Jardins_R+3.dwg</p>
+                                                    <p class="text-sm text-muted-foreground">Format CAO • 12.3 MB</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between text-sm">
+                                                <span class="text-muted-foreground">Extraction quantités</span>
+                                                <span class="text-blue-600">78%</span>
+                                            </div>
+                                            <div class="w-full bg-muted rounded-full h-2">
+                                                <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 78%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-3 rounded-lg">
+                                            <p class="text-sm text-blue-800">
+                                                <i class="fas fa-brain mr-2"></i>
+                                                IA détectée: 347 éléments structurels, 89 ouvertures, 12 réseaux
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-border rounded-lg p-4 space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                                    <i class="fas fa-check text-green-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-foreground">Bureau_Commercial_Niveau_0.ifc</p>
+                                                    <p class="text-sm text-muted-foreground">Format BIM • 23.7 MB</p>
+                                                </div>
+                                            </div>
+                                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Terminé</span>
+                                        </div>
+                                        <div class="bg-green-50 p-3 rounded-lg">
+                                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                                <div>
+                                                    <span class="text-muted-foreground">Béton:</span>
+                                                    <span class="ml-2 font-medium text-foreground">247.5 m³</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">Acier:</span>
+                                                    <span class="ml-2 font-medium text-foreground">12.8 T</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">Coffrage:</span>
+                                                    <span class="ml-2 font-medium text-foreground">1,234 m²</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">Confiance IA:</span>
+                                                    <span class="ml-2 font-medium text-green-600">97.2%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- AI Predictions -->
+                                <div class="space-y-4">
+                                    <h3 class="font-semibold text-foreground">Prédictions IA</h3>
+                                    
+                                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-exclamation-triangle text-orange-600"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <h4 class="font-medium text-orange-800">Risque de Retard Détecté</h4>
+                                                <p class="text-sm text-orange-700 mt-1">
+                                                    L'IA prédit un retard de 3-5 jours sur le chantier "Résidence Les Jardins" 
+                                                    basé sur la météo et les approvisionnements.
+                                                </p>
+                                                <div class="mt-3 flex space-x-2">
+                                                    <button class="bg-orange-600 text-white px-3 py-1 rounded text-sm hover:bg-orange-700">
+                                                        Voir Solutions
+                                                    </button>
+                                                    <button class="border border-orange-600 text-orange-600 px-3 py-1 rounded text-sm hover:bg-orange-50">
+                                                        Ajuster Planning
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-lightbulb text-blue-600"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <h4 class="font-medium text-blue-800">Optimisation Recommandée</h4>
+                                                <p class="text-sm text-blue-700 mt-1">
+                                                    Réaffecter 2 équipes du chantier "Bureau Commercial" vers "Résidence Les Jardins" 
+                                                    pour optimiser les délais globaux.
+                                                </p>
+                                                <div class="mt-3">
+                                                    <span class="bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                                                        Gain estimé: -2 jours
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IoT Equipment Tracking -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-card rounded-lg shadow-sm border border-border">
+                            <div class="p-6 border-b border-border">
+                                <h2 class="text-xl font-bold text-foreground">Suivi IoT Équipements</h2>
+                                <p class="text-sm text-muted-foreground">247 équipements connectés en temps réel</p>
+                            </div>
+                            <div class="p-6">
+                                <!-- @FUNCTIONALITY: This should implement real IoT equipment tracking -->
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between p-4 border border-border rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-truck text-green-600 text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-foreground">Pelle CAT 320D</p>
+                                                <p class="text-sm text-muted-foreground">Chantier: Résidence Les Jardins</p>
+                                                <div class="flex items-center space-x-2 mt-1">
+                                                    <div class="w-2 h-2 bg-green-500 rounded-full iot-pulse"></div>
+                                                    <span class="text-xs text-green-600">Actif • GPS: 48.8566, 2.3522</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-sm text-muted-foreground">Utilisation</p>
+                                            <p class="text-lg font-bold text-green-600">87%</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between p-4 border border-border rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-cog text-orange-600 text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-foreground">Grue Potain MD 485</p>
+                                                <p class="text-sm text-muted-foreground">Chantier: Bureau Commercial</p>
+                                                <div class="flex items-center space-x-2 mt-1">
+                                                    <div class="w-2 h-2 bg-orange-500 rounded-full iot-pulse"></div>
+                                                    <span class="text-xs text-orange-600">Maintenance préventive requise</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-sm text-muted-foreground">Utilisation</p>
+                                            <p class="text-lg font-bold text-orange-600">23%</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between p-4 border border-border rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-foreground">Compacteur Dynapac</p>
+                                                <p class="text-sm text-muted-foreground">Hors zone autorisée</p>
+                                                <div class="flex items-center space-x-2 mt-1">
+                                                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                                                    <span class="text-xs text-red-600">Alerte géofencing active</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
+                                            Localiser
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Computer Vision Quality Control -->
+                        <div class="bg-card rounded-lg shadow-sm border border-border">
+                            <div class="p-6 border-b border-border">
+                                <h2 class="text-xl font-bold text-foreground">Contrôle Qualité IA</h2>
+                                <p class="text-sm text-muted-foreground">Analyse automatique par Computer Vision</p>
+                            </div>
+                            <div class="p-6">
+                                <!-- @FUNCTIONALITY: This should implement Computer Vision quality analysis -->
+                                <div class="space-y-4">
+                                    <div class="border border-border rounded-lg overflow-hidden">
+                                        <!-- Construction site image showing concrete pouring -->
+                                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400" 
+                                             alt="Concrete pouring on construction site" 
+                                             class="w-full h-48 object-cover" />
+                                        <div class="p-4">
+                                            <div class="flex items-center justify-between mb-3">
+                                                <h4 class="font-medium text-foreground">Coulage Béton - Niveau R+2</h4>
+                                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">✓ Conforme</span>
+                                            </div>
+                                            <div class="space-y-2 text-sm">
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">Régularité surface:</span>
+                                                    <span class="text-green-600 font-medium">97.2%</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">Absence de fissures:</span>
+                                                    <span class="text-green-600 font-medium">100%</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">Conformité ferraillage:</span>
+                                                    <span class="text-green-600 font-medium">95.8%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-orange-200 rounded-lg overflow-hidden bg-orange-50">
+                                        <!-- Construction site image showing structural work -->
+                                        <img src="https://pixabay.com/get/g38b5985af8657401ae049bcbef0717f9670a913c683ab62fa0744f0a9baa16c32bbcced3d14e7d490da0ab8f19f135a09d4114bbd12053b02b0be51a428e1910_1280.jpg" 
+                                             alt="Steel reinforcement structural work" 
+                                             class="w-full h-32 object-cover" />
+                                        <div class="p-4">
+                                            <div class="flex items-center justify-between mb-3">
+                                                <h4 class="font-medium text-orange-800">Ferraillage Poutre P12</h4>
+                                                <span class="bg-orange-200 text-orange-800 px-2 py-1 rounded text-sm">⚠ Attention</span>
+                                            </div>
+                                            <p class="text-sm text-orange-700">
+                                                IA détecte: Espacement des armatures supérieur aux plans (25cm vs 20cm prévu)
+                                            </p>
+                                            <button class="mt-2 bg-orange-600 text-white px-3 py-1 rounded text-sm hover:bg-orange-700">
+                                                Créer Non-Conformité
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Interface Preview -->
+                    <div class="bg-card rounded-lg shadow-sm border border-border">
+                        <div class="p-6 border-b border-border">
+                            <h2 class="text-xl font-bold text-foreground">Interface Mobile Terrain</h2>
+                            <p class="text-sm text-muted-foreground">Application optimisée pour conditions de chantier avec mode hors-ligne</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <!-- Mobile Device Mockup -->
+                                <div class="lg:col-span-1">
+                                    <div class="mx-auto w-72 h-96 bg-gray-900 rounded-3xl p-2 shadow-xl">
+                                        <div class="w-full h-full bg-background rounded-2xl overflow-hidden">
+                                            <!-- Mobile Header -->
+                                            <div class="bg-primary p-4 text-primary-foreground">
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex items-center space-x-2">
+                                                        <i class="fas fa-hard-hat"></i>
+                                                        <span class="font-bold">CIVIL360</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-2">
+                                                        <div class="w-2 h-2 bg-green-400 rounded-full offline-indicator"></div>
+                                                        <span class="text-xs">Mode Offline</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <p class="text-sm opacity-90">Chantier: Résidence Les Jardins</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Mobile Content -->
+                                            <div class="p-4 space-y-4">
+                                                <div class="grid grid-cols-2 gap-3">
+                                                    <button class="bg-card border border-border p-4 rounded-lg text-center">
+                                                        <i class="fas fa-camera text-2xl text-primary mb-2"></i>
+                                                        <p class="text-xs font-medium">Photo Qualité</p>
+                                                    </button>
+                                                    <button class="bg-card border border-border p-4 rounded-lg text-center">
+                                                        <i class="fas fa-clipboard-check text-2xl text-green-600 mb-2"></i>
+                                                        <p class="text-xs font-medium">Check-lists</p>
+                                                    </button>
+                                                    <button class="bg-card border border-border p-4 rounded-lg text-center">
+                                                        <i class="fas fa-box text-2xl text-orange-600 mb-2"></i>
+                                                        <p class="text-xs font-medium">Réception</p>
+                                                    </button>
+                                                    <button class="bg-card border border-border p-4 rounded-lg text-center">
+                                                        <i class="fas fa-exclamation text-2xl text-red-600 mb-2"></i>
+                                                        <p class="text-xs font-medium">Incident</p>
+                                                    </button>
+                                                </div>
+                                                
+                                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                                    <div class="flex items-center space-x-2">
+                                                        <i class="fas fa-sync-alt text-yellow-600"></i>
+                                                        <span class="text-sm text-yellow-800">3 éléments en attente de sync</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mobile Features -->
+                                <div class="lg:col-span-2 space-y-6">
+                                    <div>
+                                        <h3 class="font-semibold text-foreground mb-4">Fonctionnalités Terrain</h3>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="flex items-start space-x-3 p-4 border border-border rounded-lg">
+                                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                    <i class="fas fa-wifi-slash text-blue-600"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-medium text-foreground">Mode Hors-ligne</h4>
+                                                    <p class="text-sm text-muted-foreground">Fonctionnement complet sans connexion avec sync automatique</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-start space-x-3 p-4 border border-border rounded-lg">
+                                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                                    <i class="fas fa-map-marker-alt text-green-600"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-medium text-foreground">Géolocalisation</h4>
+                                                    <p class="text-sm text-muted-foreground">Toutes les saisies sont automatiquement géolocalisées</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-start space-x-3 p-4 border border-border rounded-lg">
+                                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                                    <i class="fas fa-microphone text-purple-600"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-medium text-foreground">Saisie Vocale</h4>
+                                                    <p class="text-sm text-muted-foreground">Dictée de rapports avec gants et équipements de protection</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-start space-x-3 p-4 border border-border rounded-lg">
+                                                <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                                    <i class="fas fa-shield-alt text-orange-600"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-medium text-foreground">Interface Robuste</h4>
+                                                    <p class="text-sm text-muted-foreground">Résistante aux conditions météo et manipulations avec gants</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Odoo Integration Status -->
+                    <div class="bg-card rounded-lg shadow-sm border border-border">
+                        <div class="p-6 border-b border-border">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h2 class="text-xl font-bold text-foreground">Intégration Odoo ERP</h2>
+                                    <p class="text-sm text-muted-foreground">Synchronisation bidirectionnelle temps réel avec l'ERP existant</p>
+                                </div>
+                                <div class="flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-lg">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm font-medium text-green-700">Synchronisé</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <!-- Data Flow -->
+                                <div>
+                                    <h3 class="font-semibold text-foreground mb-4">Flux de Données</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex items-center space-x-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                            <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-database text-white"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <h4 class="font-medium text-blue-800">Odoo → CIVIL360</h4>
+                                                <p class="text-sm text-blue-700">Projets, clients, budgets, personnel</p>
+                                            </div>
+                                            <i class="fas fa-arrow-right text-blue-600"></i>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                                            <i class="fas fa-arrow-left text-green-600"></i>
+                                            <div class="flex-1">
+                                                <h4 class="font-medium text-green-800">CIVIL360 → Odoo</h4>
+                                                <p class="text-sm text-green-700">Heures, consommations, avancements</p>
+                                            </div>
+                                            <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-hard-hat text-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sync Status -->
+                                <div>
+                                    <h3 class="font-semibold text-foreground mb-4">Statut Synchronisation</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between p-3 border border-border rounded-lg">
+                                            <div class="flex items-center space-x-3">
+                                                <i class="fas fa-users text-blue-600"></i>
+                                                <span class="text-sm font-medium">Personnel</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-xs text-muted-foreground">Dernière sync: 14:32</span>
+                                                <i class="fas fa-check-circle text-green-600"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 border border-border rounded-lg">
+                                            <div class="flex items-center space-x-3">
+                                                <i class="fas fa-project-diagram text-purple-600"></i>
+                                                <span class="text-sm font-medium">Projets</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-xs text-muted-foreground">Dernière sync: 14:30</span>
+                                                <i class="fas fa-check-circle text-green-600"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 border border-border rounded-lg">
+                                            <div class="flex items-center space-x-3">
+                                                <i class="fas fa-euro-sign text-green-600"></i>
+                                                <span class="text-sm font-medium">Facturation</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-xs text-orange-600">En cours...</span>
+                                                <div class="w-4 h-4 border-2 border-orange-200 border-t-orange-600 rounded-full animate-spin"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                                            <h4 class="font-medium text-purple-800 mb-2">API Avancées Disponibles</h4>
+                                            <div class="grid grid-cols-2 gap-2 text-sm text-purple-700">
+                                                <div>• REST API complète</div>
+                                                <div>• WebHooks temps réel</div>
+                                                <div>• GraphQL queries</div>
+                                                <div>• Batch synchronisation</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Predictive Analytics -->
+                    <div class="bg-card rounded-lg shadow-sm border border-border">
+                        <div class="p-6 border-b border-border">
+                            <h2 class="text-xl font-bold text-foreground">Analytics Prédictifs</h2>
+                            <p class="text-sm text-muted-foreground">Machine Learning pour optimisation et prévision des performances</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                                    <div class="flex items-center space-x-3 mb-4">
+                                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-clock text-white"></i>
+                                        </div>
+                                        <h3 class="font-semibold text-blue-800">Prédiction Délais</h3>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="text-center">
+                                            <p class="text-3xl font-bold text-blue-600">94.7%</p>
+                                            <p class="text-sm text-blue-700">Précision prédictive</p>
+                                        </div>
+                                        <div class="text-sm text-blue-800">
+                                            <p>• Analyse météorologique</p>
+                                            <p>• Disponibilité ressources</p>
+                                            <p>• Historique performances</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
+                                    <div class="flex items-center space-x-3 mb-4">
+                                        <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-chart-line text-white"></i>
+                                        </div>
+                                        <h3 class="font-semibold text-green-800">Optimisation ROI</h3>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="text-center">
+                                            <p class="text-3xl font-bold text-green-600">+€847K</p>
+                                            <p class="text-sm text-green-700">Économies générées</p>
+                                        </div>
+                                        <div class="text-sm text-green-800">
+                                            <p>• Allocation optimale</p>
+                                            <p>• Réduction gaspillage</p>
+                                            <p>• Maintenance prédictive</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                                    <div class="flex items-center space-x-3 mb-4">
+                                        <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-shield-alt text-white"></i>
+                                        </div>
+                                        <h3 class="font-semibold text-purple-800">Prévention Risques</h3>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="text-center">
+                                            <p class="text-3xl font-bold text-purple-600">-73%</p>
+                                            <p class="text-sm text-purple-700">Incidents évités</p>
+                                        </div>
+                                        <div class="text-sm text-purple-800">
+                                            <p>• Détection anomalies</p>
+                                            <p>• Alertes préventives</p>
+                                            <p>• Analyse comportementale</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <!-- @END_COMPONENT: MainDashboard -->
+        </div>
+        <!-- @END_COMPONENT: MainContent -->
+    </div>
+    <!-- @END_COMPONENT: MainLayout -->
+
+    <script>
+        // TODO: Implement real AI processing, IoT connectivity, and Odoo integration
+        (function() {
+            // Simulate IoT pulse animation for equipment tracking
+            setInterval(() => {
+                const iotElements = document.querySelectorAll('.iot-pulse');
+                iotElements.forEach(element => {
+                    element.style.transform = 'scale(1.1)';
+                    element.style.opacity = '0.8';
+                    setTimeout(() => {
+                        element.style.transform = 'scale(1)';
+                        element.style.opacity = '1';
+                    }, 1000);
+                });
+            }, 2000);
+
+            // Simulate AI processing progress
+            let aiProgress = 78;
+            const progressBar = document.querySelector('[style*="width: 78%"]');
+            if (progressBar) {
+                setInterval(() => {
+                    if (aiProgress < 100) {
+                        aiProgress += Math.random() * 3;
+                        progressBar.style.width = Math.min(aiProgress, 100) + '%';
+                        
+                        if (aiProgress >= 100) {
+                            setTimeout(() => {
+                                // Simulate completion state change
+                                const container = progressBar.closest('.border');
+                                if (container) {
+                                    container.classList.remove('border-border');
+                                    container.classList.add('border-green-200', 'bg-green-50');
+                                }
+                            }, 500);
+                        }
+                    }
+                }, 2000);
+            }
+
+            // Simulate real-time data updates
+            setInterval(() => {
+                const activeTeams = document.querySelector('[data-bind="stats.activeTeams"]');
+                if (activeTeams) {
+                    const currentValue = parseInt(activeTeams.textContent);
+                    const newValue = currentValue + Math.floor(Math.random() * 3) - 1;
+                    activeTeams.textContent = Math.max(200, Math.min(300, newValue));
+                }
+
+                const qualityAlerts = document.querySelector('[data-bind="stats.qualityAlerts"]');
+                if (qualityAlerts) {
+                    const currentValue = parseInt(qualityAlerts.textContent);
+                    if (Math.random() > 0.7) {
+                        const newValue = Math.max(0, currentValue + Math.floor(Math.random() * 2) - 1);
+                        qualityAlerts.textContent = newValue;
+                    }
+                }
+            }, 5000);
+
+            // Simulate offline mode toggle for mobile demo
+            const offlineIndicator = document.querySelector('.offline-indicator');
+            if (offlineIndicator) {
+                setInterval(() => {
+                    const isOffline = Math.random() > 0.8;
+                    if (isOffline) {
+                        offlineIndicator.classList.remove('bg-green-400');
+                        offlineIndicator.classList.add('bg-red-400');
+                        offlineIndicator.nextElementSibling.textContent = 'Mode Offline';
+                    } else {
+                        offlineIndicator.classList.remove('bg-red-400');
+                        offlineIndicator.classList.add('bg-green-400');
+                        offlineIndicator.nextElementSibling.textContent = 'Synchronisé';
+                    }
+                }, 10000);
+            }
+
+            console.log('CIVIL360 Platform Initialized');
+            console.log('- AI Processing: Active');
+            console.log('- IoT Tracking: 247 devices connected');
+            console.log('- Odoo Integration: Synchronized');
+            console.log('- Mobile Offline Mode: Ready');
+            console.log('- Computer Vision: Processing quality checks');
+        })();
+    </script>
+</body>
+</html>

@@ -8,7 +8,8 @@ import {
   Camera, 
   Smartphone, 
   RefreshCw,
-  HardHat
+  HardHat,
+  Wrench
 } from "lucide-react";
 
 const navigation = [
@@ -16,6 +17,7 @@ const navigation = [
   { name: "Chantiers Actifs", href: "/chantiers", icon: Building, count: 12 },
   { name: "IA Analyse Plans", href: "/ai-plans", icon: Brain, badge: "3 en cours" },
   { name: "IoT Équipements", href: "/iot", icon: Radio, badge: "247 actifs" },
+  { name: "Gestion Équipements", href: "/equipment", icon: Wrench, badge: "2 critiques" },
   { name: "Contrôle Qualité", href: "/quality", icon: Camera },
   { name: "Interface Mobile", href: "/mobile", icon: Smartphone },
   { name: "Intégration Odoo", href: "/odoo", icon: RefreshCw },

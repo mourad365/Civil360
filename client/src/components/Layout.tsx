@@ -1,8 +1,17 @@
 import { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLocation } from "wouter";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Menu, Bell } from "lucide-react";
+import { Menu, Bell, LogOut, User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,6 +19,22 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const isMobile = useIsMobile();
+  const { user, logout } = useAuth();
+  const [, setLocation] = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    setLocation("/login");
+  };
+
+  const getUserInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <div className="flex h-screen bg-background">
@@ -50,15 +75,40 @@ export default function Layout({ children }: LayoutProps) {
                   <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">3</span>
                 </Button>
                 {/* User Profile */}
-                <div className="flex items-center space-x-3">
-                  <div className="text-right hidden md:block">
-                    <p className="text-sm font-medium text-foreground">Marc Dubois</p>
-                    <p className="text-xs text-muted-foreground">Chef d'Exécution</p>
-                  </div>
-                  <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-primary-foreground font-medium">MD</span>
-                  </div>
-                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center space-x-3 h-auto px-3 py-2 hover:bg-accent">
+                      <div className="text-right hidden md:block">
+                        <p className="text-sm font-medium text-foreground">{user?.name}</p>
+                        <p className="text-xs text-muted-foreground">{user?.role}</p>
+                      </div>
+                      <div className="w-10 h-10 bg-construction-steel rounded-full flex items-center justify-center shadow-md">
+                        <span className="text-white font-semibold text-sm">
+                          {user ? getUserInitials(user.name) : "??"}
+                        </span>
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 construction-glass">
+                    <div className="px-2 py-1.5 text-sm">
+                      <div className="font-medium">{user?.name}</div>
+                      <div className="text-muted-foreground">{user?.email}</div>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      Profil
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      className="cursor-pointer text-destructive focus:text-destructive"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Déconnexion
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>

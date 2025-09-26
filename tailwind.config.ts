@@ -61,6 +61,29 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // Construction industry colors
+        construction: {
+          steel: "var(--construction-steel)",
+          orange: "var(--construction-orange)",
+          concrete: "var(--construction-concrete)",
+          earth: "var(--construction-earth)",
+          "safety-green": "var(--construction-safety-green)",
+          warning: "var(--construction-warning)",
+        },
+        // Equipment status colors
+        equipment: {
+          active: "hsl(142, 76%, 36%)",
+          maintenance: "hsl(45, 100%, 55%)",
+          offline: "hsl(0, 84%, 60%)",
+          idle: "hsl(200, 12%, 60%)",
+        },
+        // Quality status colors
+        quality: {
+          passed: "hsl(142, 76%, 36%)",
+          failed: "hsl(0, 84%, 60%)",
+          pending: "hsl(45, 100%, 55%)",
+          review: "hsl(32, 100%, 50%)",
+        },
       },
       fontFamily: {
         sans: ["var(--font-sans)"],

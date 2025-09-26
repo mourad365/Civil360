@@ -14,26 +14,26 @@ export default function IoTDevice({ equipment, onLocate }: IoTDeviceProps) {
   const getStatusIcon = () => {
     switch (equipment.status) {
       case "active":
-        return <div className="w-2 h-2 bg-green-500 rounded-full iot-pulse" />;
+        return <div className="w-3 h-3 bg-equipment-active rounded-full iot-pulse shadow-lg" />;
       case "maintenance":
-        return <div className="w-2 h-2 bg-orange-500 rounded-full iot-pulse" />;
+        return <div className="w-3 h-3 bg-equipment-maintenance rounded-full iot-pulse shadow-lg" />;
       case "offline":
-        return <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />;
+        return <div className="w-3 h-3 bg-equipment-offline rounded-full offline-indicator shadow-lg" />;
       default:
-        return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
+        return <div className="w-3 h-3 bg-equipment-idle rounded-full shadow-lg" />;
     }
   };
 
   const getStatusColor = () => {
     switch (equipment.status) {
       case "active":
-        return "text-green-600";
+        return "text-equipment-active font-semibold";
       case "maintenance":
-        return "text-orange-600";
+        return "text-equipment-maintenance font-semibold";
       case "offline":
-        return "text-red-600";
+        return "text-equipment-offline font-semibold";
       default:
-        return "text-gray-600";
+        return "text-equipment-idle";
     }
   };
 
@@ -58,15 +58,16 @@ export default function IoTDevice({ equipment, onLocate }: IoTDeviceProps) {
   };
 
   return (
-    <Card className="border border-border">
-      <CardContent className="p-4">
+    <Card className="construction-card border border-border/50 shadow-md hover:shadow-lg transition-all duration-300">
+      <CardContent className="p-5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             <div className={cn(
-              "w-12 h-12 rounded-lg flex items-center justify-center",
-              equipment.status === "active" ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400" :
-              equipment.status === "maintenance" ? "bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-400" :
-              "bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400"
+              "w-14 h-14 rounded-xl flex items-center justify-center shadow-inner",
+              equipment.status === "active" ? "equipment-active text-white" :
+              equipment.status === "maintenance" ? "equipment-maintenance text-white" :
+              equipment.status === "offline" ? "equipment-offline text-white" :
+              "bg-equipment-idle text-white"
             )}>
               {getEquipmentIcon()}
             </div>

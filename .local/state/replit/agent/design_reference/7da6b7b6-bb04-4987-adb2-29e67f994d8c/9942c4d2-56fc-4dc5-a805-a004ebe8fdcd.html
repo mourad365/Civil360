@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIVIL360 - Plateforme de Gestion Chantiers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    popover: {
+                        DEFAULT: "var(--popover)",
+                        foreground: "var(--popover-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                    chart: {
+                        "1": "var(--chart-1)",
+                        "2": "var(--chart-2)",
+                        "3": "var(--chart-3)",
+                        "4": "var(--chart-4)",
+                        "5": "var(--chart-5)",
+                    },
+                    warning: "var(--warning)",
+                    success: "var(--success)",
+                }
+            },
+        }
+    };
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --radius: 12px;
+            --background: hsl(0 0% 98%);
+            --foreground: hsl(222 47% 11%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222 47% 11%);
+            --popover: hsl(0 0% 100%);
+            --popover-foreground: hsl(222 47% 11%);
+            --primary: hsl(14 100% 60%);
+            --primary-foreground: hsl(0 0% 100%);
+            --secondary: hsl(213 46% 32%);
+            --secondary-foreground: hsl(0 0% 100%);
+            --muted: hsl(210 14% 89%);
+            --muted-foreground: hsl(215 16% 42%);
+            --accent: hsl(210 14% 95%);
+            --accent-foreground: hsl(222 47% 11%);
+            --destructive: hsl(0 84% 60%);
+            --destructive-foreground: hsl(0 0% 100%);
+            --border: hsl(214 32% 91%);
+            --input: hsl(214 32% 91%);
+            --ring: hsl(14 100% 60%);
+            --chart-1: hsl(14 100% 60%);
+            --chart-2: hsl(213 46% 32%);
+            --chart-3: hsl(160 84% 39%);
+            --chart-4: hsl(43 89% 38%);
+            --chart-5: hsl(270 95% 75%);
+            --warning: hsl(38 92% 50%);
+            --success: hsl(142 71% 45%);
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--background);
+            color: var(--foreground);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 999;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: hsl(142 71% 45% / 0.1);
+            color: hsl(142 71% 45%);
+        }
+
+        .status-warning {
+            background: hsl(38 92% 50% / 0.1);
+            color: hsl(38 92% 50%);
+        }
+
+        .status-danger {
+            background: hsl(0 84% 60% / 0.1);
+            color: hsl(0 84% 60%);
+        }
+
+        .status-inactive {
+            background: hsl(215 16% 42% / 0.1);
+            color: hsl(215 16% 42%);
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, hsl(14 100% 60% / 0.1), hsl(213 46% 32% / 0.1));
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .progress-bg {
+            stroke: hsl(210 14% 89%);
+        }
+
+        .progress-bar {
+            stroke: hsl(14 100% 60%);
+            stroke-linecap: round;
+            stroke-dasharray: 314;
+            stroke-dashoffset: 94.2; /* 70% completion */
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        @media (min-width: 768px) {
+            .sidebar {
+                transform: translateX(0);
+            }
+            
+            .mobile-nav {
+                display: none;
+            }
+
+            .floating-action {
+                bottom: 20px;
+            }
+        }
+
+        .map-container {
+            background: linear-gradient(135deg, hsl(210 40% 92%), hsl(210 40% 96%));
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-marker {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .map-marker:hover {
+            transform: scale(1.1);
+        }
+
+        .marker-active {
+            background: hsl(142 71% 45%);
+            top: 25%;
+            left: 30%;
+        }
+
+        .marker-warning {
+            background: hsl(38 92% 50%);
+            top: 45%;
+            left: 65%;
+        }
+
+        .marker-danger {
+            background: hsl(0 84% 60%);
+            top: 70%;
+            left: 40%;
+        }
+
+        .marker-inactive {
+            background: hsl(215 16% 42%);
+            top: 20%;
+            left: 70%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="md:hidden bg-card border-b border-border p-4 flex items-center justify-between">
+        <button id="menu-toggle" class="p-2 text-muted-foreground hover:text-foreground">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+        <h1 class="text-lg font-semibold">CIVIL360</h1>
+        <button class="p-2 text-muted-foreground hover:text-foreground relative">
+            <i class="fas fa-bell text-xl"></i>
+            <span class="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full text-xs text-primary-foreground flex items-center justify-center">3</span>
+        </button>
+    </header>
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar fixed md:static inset-y-0 left-0 w-72 bg-card border-r border-border z-50 md:z-auto">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-hard-hat text-primary-foreground"></i>
+                    </div>
+                    <span class="text-xl font-bold">CIVIL360</span>
+                </div>
+
+                <!-- User Profile -->
+                <div class="flex items-center gap-3 p-3 bg-accent rounded-lg mb-6">
+                    <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-primary-foreground"></i>
+                    </div>
+                    <div>
+                        <div class="font-medium" data-mock="true">Jean Dupont</div>
+                        <div class="text-sm text-muted-foreground" data-mock="true">Chef de Projet</div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="space-y-2">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg font-medium">
+                        <i class="fas fa-chart-pie w-5"></i>
+                        Tableau de Bord
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg">
+                        <i class="fas fa-map-marked-alt w-5"></i>
+                        Cartographie
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg">
+                        <i class="fas fa-tasks w-5"></i>
+                        Tâches & Planning
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg">
+                        <i class="fas fa-tools w-5"></i>
+                        Équipements
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg">
+                        <i class="fas fa-clipboard-check w-5"></i>
+                        Contrôle Qualité
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg">
+                        <i class="fas fa-shopping-cart w-5"></i>
+                        Approvisionnements
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg">
+                        <i class="fas fa-users w-5"></i>
+                        Équipes
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg">
+                        <i class="fas fa-chart-bar w-5"></i>
+                        Analytics
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile -->
+        <div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <div class="p-6 max-w-7xl mx-auto pb-24 md:pb-6">
+                <!-- Header -->
+                <div class="hidden md:flex items-center justify-between mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold mb-2">Tableau de Bord</h1>
+                        <p class="text-muted-foreground">Vue d'ensemble de tous vos chantiers en temps réel</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button class="px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:bg-accent/80 transition-colors">
+                            <i class="fas fa-download mr-2"></i>Exporter
+                        </button>
+                        <button class="p-2 text-muted-foreground hover:text-foreground relative">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full text-xs text-primary-foreground flex items-center justify-center">3</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+                    <div class="bg-card border border-border rounded-lg p-4 md:p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="p-2 bg-primary/10 rounded-lg">
+                                <i class="fas fa-building text-primary text-lg"></i>
+                            </div>
+                            <span class="text-xs text-success font-medium">+12%</span>
+                        </div>
+                        <div class="text-2xl md:text-3xl font-bold mb-1" data-mock="true">23</div>
+                        <div class="text-sm text-muted-foreground">Chantiers Actifs</div>
+                    </div>
+
+                    <div class="bg-card border border-border rounded-lg p-4 md:p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="p-2 bg-chart-2/10 rounded-lg">
+                                <i class="fas fa-users text-chart-2 text-lg"></i>
+                            </div>
+                            <span class="text-xs text-success font-medium">+8%</span>
+                        </div>
+                        <div class="text-2xl md:text-3xl font-bold mb-1" data-mock="true">156</div>
+                        <div class="text-sm text-muted-foreground">Équipes Déployées</div>
+                    </div>
+
+                    <div class="bg-card border border-border rounded-lg p-4 md:p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="p-2 bg-warning/10 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-warning text-lg"></i>
+                            </div>
+                            <span class="text-xs text-destructive font-medium">-3%</span>
+                        </div>
+                        <div class="text-2xl md:text-3xl font-bold mb-1" data-mock="true">7</div>
+                        <div class="text-sm text-muted-foreground">Alertes Critiques</div>
+                    </div>
+
+                    <div class="bg-card border border-border rounded-lg p-4 md:p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="p-2 bg-chart-3/10 rounded-lg">
+                                <i class="fas fa-chart-line text-chart-3 text-lg"></i>
+                            </div>
+                            <span class="text-xs text-success font-medium">+15%</span>
+                        </div>
+                        <div class="text-2xl md:text-3xl font-bold mb-1" data-mock="true">87%</div>
+                        <div class="text-sm text-muted-foreground">Performance Globale</div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="grid lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Map Overview -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-card border border-border rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold">Cartographie des Chantiers</h3>
+                                <button class="text-sm text-primary hover:text-primary/80">Voir tout</button>
+                            </div>
+                            <div class="map-container h-80 relative">
+                                <!-- Simulated map background pattern -->
+                                <div class="absolute inset-0 opacity-10">
+                                    <svg width="100%" height="100%" viewBox="0 0 400 300">
+                                        <defs>
+                                            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#666" stroke-width="0.5"/>
+                                            </pattern>
+                                        </defs>
+                                        <rect width="100%" height="100%" fill="url(#grid)" />
+                                    </svg>
+                                </div>
+
+                                <!-- Map markers -->
+                                <div class="map-marker marker-active" title="Chantier A - En cours">A</div>
+                                <div class="map-marker marker-warning" title="Chantier B - Attention">B</div>
+                                <div class="map-marker marker-danger" title="Chantier C - Critique">C</div>
+                                <div class="map-marker marker-inactive" title="Chantier D - Arrêté">D</div>
+
+                                <!-- Map legend -->
+                                <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur p-3 rounded-lg text-xs">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <div class="w-3 h-3 bg-success rounded-full"></div>
+                                        <span>Actif</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <div class="w-3 h-3 bg-warning rounded-full"></div>
+                                        <span>Attention</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <div class="w-3 h-3 bg-destructive rounded-full"></div>
+                                        <span>Critique</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 bg-muted-foreground rounded-full"></div>
+                                        <span>Arrêté</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Overview -->
+                    <div>
+                        <div class="bg-card border border-border rounded-lg p-6">
+                            <h3 class="text-lg font-semibold mb-6">Performance Globale</h3>
+                            <div class="flex items-center justify-center mb-6">
+                                <div class="progress-ring">
+                                    <svg>
+                                        <circle cx="60" cy="60" r="50" class="progress-bg"></circle>
+                                        <circle cx="60" cy="60" r="50" class="progress-bar"></circle>
+                                    </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold" data-mock="true">87%</div>
+                                            <div class="text-xs text-muted-foreground">Objectif</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm">Délais respectés</span>
+                                    <span class="text-sm font-medium text-success" data-mock="true">92%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm">Budget maîtrisé</span>
+                                    <span class="text-sm font-medium text-success" data-mock="true">85%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm">Qualité conforme</span>
+                                    <span class="text-sm font-medium text-warning" data-mock="true">78%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm">Sécurité</span>
+                                    <span class="text-sm font-medium text-success" data-mock="true">95%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Projects Table -->
+                <div class="bg-card border border-border rounded-lg p-6 mb-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold">Chantiers en Cours</h3>
+                        <div class="flex items-center gap-3">
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
+                                <input type="text" placeholder="Rechercher..." class="pl-10 pr-4 py-2 bg-accent border border-border rounded-lg text-sm">
+                            </div>
+                            <select class="px-3 py-2 bg-accent border border-border rounded-lg text-sm">
+                                <option>Tous les statuts</option>
+                                <option>Actif</option>
+                                <option>En attente</option>
+                                <option>Critique</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-accent/50">
+                                <tr>
+                                    <th class="text-left py-3 px-4 font-medium text-sm">Projet</th>
+                                    <th class="text-left py-3 px-4 font-medium text-sm">Chef de Chantier</th>
+                                    <th class="text-left py-3 px-4 font-medium text-sm">Avancement</th>
+                                    <th class="text-left py-3 px-4 font-medium text-sm">Statut</th>
+                                    <th class="text-left py-3 px-4 font-medium text-sm">Échéance</th>
+                                    <th class="text-center py-3 px-4 font-medium text-sm">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border">
+                                <!-- @MAP: projects.map(project => ( -->
+                                <tr class="hover:bg-accent/30">
+                                    <td class="py-4 px-4">
+                                        <div class="font-medium" data-mock="true">Résidence Les Cèdres</div>
+                                        <div class="text-sm text-muted-foreground" data-mock="true">Bâtiment A - Phase 2</div>
+                                    </td>
+                                    <td class="py-4 px-4" data-mock="true">Marie Dubois</td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 bg-muted rounded-full h-2">
+                                                <div class="bg-success h-2 rounded-full" style="width: 75%"></div>
+                                            </div>
+                                            <span class="text-sm font-medium" data-mock="true">75%</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="status-badge status-active">
+                                            <div class="w-2 h-2 bg-current rounded-full"></div>
+                                            Actif
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-sm" data-mock="true">15 Mars 2024</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <button class="p-2 hover:bg-accent rounded-lg transition-colors">
+                                            <i class="fas fa-eye text-muted-foreground"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr class="hover:bg-accent/30">
+                                    <td class="py-4 px-4">
+                                        <div class="font-medium" data-mock="true">Centre Commercial Nord</div>
+                                        <div class="text-sm text-muted-foreground" data-mock="true">Parking souterrain</div>
+                                    </td>
+                                    <td class="py-4 px-4" data-mock="true">Pierre Martin</td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 bg-muted rounded-full h-2">
+                                                <div class="bg-warning h-2 rounded-full" style="width: 45%"></div>
+                                            </div>
+                                            <span class="text-sm font-medium" data-mock="true">45%</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="status-badge status-warning">
+                                            <div class="w-2 h-2 bg-current rounded-full"></div>
+                                            Attention
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-sm" data-mock="true">28 Février 2024</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <button class="p-2 hover:bg-accent rounded-lg transition-colors">
+                                            <i class="fas fa-eye text-muted-foreground"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr class="hover:bg-accent/30">
+                                    <td class="py-4 px-4">
+                                        <div class="font-medium" data-mock="true">Pont de la Liberté</div>
+                                        <div class="text-sm text-muted-foreground" data-mock="true">Rénovation structure</div>
+                                    </td>
+                                    <td class="py-4 px-4" data-mock="true">Jean Moreau</td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 bg-muted rounded-full h-2">
+                                                <div class="bg-destructive h-2 rounded-full" style="width: 20%"></div>
+                                            </div>
+                                            <span class="text-sm font-medium" data-mock="true">20%</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="status-badge status-danger">
+                                            <div class="w-2 h-2 bg-current rounded-full"></div>
+                                            Critique
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-sm" data-mock="true">10 Mars 2024</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <button class="p-2 hover:bg-accent rounded-lg transition-colors">
+                                            <i class="fas fa-eye text-muted-foreground"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- @END_MAP )) -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Bottom Grid - Alerts and Recent Activity -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Critical Alerts -->
+                    <div class="bg-card border border-border rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">Alertes Critiques</h3>
+                            <span class="bg-destructive text-destructive-foreground text-xs px-2 py-1 rounded-full font-medium" data-mock="true">7</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3 p-3 bg-destructive/5 border border-destructive/20 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-destructive text-sm mt-1"></i>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm" data-mock="true">Retard critique - Pont de la Liberté</div>
+                                    <div class="text-xs text-muted-foreground mt-1" data-mock="true">Équipe en sous-effectif depuis 3 jours</div>
+                                    <div class="text-xs text-destructive mt-1" data-mock="true">il y a 2h</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3 p-3 bg-warning/5 border border-warning/20 rounded-lg">
+                                <i class="fas fa-tools text-warning text-sm mt-1"></i>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm" data-mock="true">Équipement défaillant - Chantier Nord</div>
+                                    <div class="text-xs text-muted-foreground mt-1" data-mock="true">Grue principale en panne</div>
+                                    <div class="text-xs text-warning mt-1" data-mock="true">il y a 4h</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3 p-3 bg-warning/5 border border-warning/20 rounded-lg">
+                                <i class="fas fa-clipboard-check text-warning text-sm mt-1"></i>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm" data-mock="true">Contrôle qualité échoué</div>
+                                    <div class="text-xs text-muted-foreground mt-1" data-mock="true">Béton non-conforme lot B3</div>
+                                    <div class="text-xs text-warning mt-1" data-mock="true">il y a 1j</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full mt-4 py-2 text-center text-primary hover:text-primary/80 text-sm font-medium">
+                            Voir toutes les alertes
+                        </button>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-card border border-border rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">Activité Récente</h3>
+                            <button class="text-sm text-primary hover:text-primary/80">Voir tout</button>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-success/10 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-success text-xs"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm" data-mock="true">Tâche terminée - Fondations Bâtiment A</div>
+                                    <div class="text-xs text-muted-foreground mt-1" data-mock="true">par Marie Dubois · il y a 30min</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-truck text-primary text-xs"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm" data-mock="true">Livraison reçue - Matériaux chantier Nord</div>
+                                    <div class="text-xs text-muted-foreground mt-1" data-mock="true">par Pierre Martin · il y a 1h</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-chart-2/10 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-users text-chart-2 text-xs"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm" data-mock="true">Nouvelle équipe assignée</div>
+                                    <div class="text-xs text-muted-foreground mt-1" data-mock="true">Équipe Electricité · il y a 2h</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-warning/10 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-camera text-warning text-xs"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm" data-mock="true">Photos contrôle qualité ajoutées</div>
+                                    <div class="text-xs text-muted-foreground mt-1" data-mock="true">par Jean Moreau · il y a 3h</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-chart-3/10 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-file-alt text-chart-3 text-xs"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm" data-mock="true">Rapport journalier généré</div>
+                                    <div class="text-xs text-muted-foreground mt-1" data-mock="true">Tous les chantiers · il y a 4h</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav bg-card border-t border-border">
+        <div class="flex items-center justify-around py-2">
+            <a href="#" class="flex flex-col items-center py-2 px-3 text-primary">
+                <i class="fas fa-chart-pie text-lg mb-1"></i>
+                <span class="text-xs">Tableau</span>
+            </a>
+            <a href="#" class="flex flex-col items-center py-2 px-3 text-muted-foreground">
+                <i class="fas fa-map-marked-alt text-lg mb-1"></i>
+                <span class="text-xs">Carte</span>
+            </a>
+            <a href="#" class="flex flex-col items-center py-2 px-3 text-muted-foreground">
+                <i class="fas fa-tasks text-lg mb-1"></i>
+                <span class="text-xs">Tâches</span>
+            </a>
+            <a href="#" class="flex flex-col items-center py-2 px-3 text-muted-foreground">
+                <i class="fas fa-tools text-lg mb-1"></i>
+                <span class="text-xs">Équipements</span>
+            </a>
+            <a href="#" class="flex flex-col items-center py-2 px-3 text-muted-foreground">
+                <i class="fas fa-plus text-lg mb-1"></i>
+                <span class="text-xs">Nouveau</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Floating Action Button -->
+    <button class="floating-action w-14 h-14 bg-primary text-primary-foreground rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+
+    <script>
+        (function() {
+            // Mobile menu toggle functionality
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            function toggleMobileMenu() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('hidden');
+                document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+            }
+
+            function closeMobileMenu() {
+                sidebar.classList.remove('open');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', toggleMobileMenu);
+            }
+
+            if (overlay) {
+                overlay.addEventListener('click', closeMobileMenu);
+            }
+
+            // Close menu on window resize to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Simulate real-time updates
+            function simulateRealTimeUpdates() {
+                // TODO: Implement real-time WebSocket connections for live data
+                // This would connect to backend services for live chantier updates
+                console.log('Real-time simulation active');
+                
+                // Mock progress bar animations
+                const progressBars = document.querySelectorAll('.progress-bar');
+                progressBars.forEach(bar => {
+                    // TODO: Update with real progress data from API
+                    const progress = Math.random() * 100;
+                    const circumference = 314;
+                    const offset = circumference - (progress / 100) * circumference;
+                    bar.style.strokeDashoffset = offset;
+                });
+            }
+
+            // Initialize real-time simulation
+            simulateRealTimeUpdates();
+            setInterval(simulateRealTimeUpdates, 30000); // Update every 30 seconds
+
+            // Map marker interaction
+            const mapMarkers = document.querySelectorAll('.map-marker');
+            mapMarkers.forEach(marker => {
+                marker.addEventListener('click', function() {
+                    // TODO: Implement modal or panel showing detailed chantier information
+                    console.log('Marker clicked:', this.title);
+                });
+            });
+
+            // Table row interactions
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('click', function(e) {
+                    if (!e.target.closest('button')) {
+                        // TODO: Navigate to detailed project view
+                        console.log('Project row clicked');
+                    }
+                });
+            });
+
+            // Floating Action Button
+            const fab = document.querySelector('.floating-action');
+            if (fab) {
+                fab.addEventListener('click', function() {
+                    // TODO: Open quick action menu or new task modal
+                    console.log('Quick action requested');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
