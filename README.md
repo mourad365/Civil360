@@ -1,11 +1,17 @@
-# 🏗️ CIVIL360 - Plateforme Complète de Gestion de Projets de Construction
+# CIVIL360 - Advanced Construction Management Platform
+
+##  **SINGLE-PORT NEXT.JS APPLICATION** - v3.0.0
+
+> ✅ Fully consolidated Next.js application running on one port (3000)
+> ✅ No Vite, no separate backend/frontend servers
+> ✅ Unified codebase with Next.js API routes
 
 CIVIL360 est une plateforme intégrée de gestion des projets de génie civil qui centralise l'information, synchronise les actions et optimise les ressources. Conçue pour différents profils d'utilisateurs avec des interfaces spécialisées et support multilingue complet (Français/العربية/English).
 
-## 🎯 Objectifs Principaux
-- ⏱️ **Réduction des délais ≤ 15%**
-- 💰 **Diminution des dépassements budgétaires de 20%** 
-- 👁️ **Visibilité temps réel sur tous les projets**
+##  Objectifs principaux
+-  **Réduction des délais ≤ 15%**
+-  **Diminution des dépassements budgétaires de 20%** 
+-  **Visibilité temps réel sur tous les projets**
 - ⚡ **Optimisation intelligente des ressources**
 
 ## 🌟 Modules Fonctionnels
@@ -53,21 +59,21 @@ CIVIL360 est une plateforme intégrée de gestion des projets de génie civil qu
 
 ## 🛠️ Technology Stack
 
-### Backend
-- **Node.js** with **Express.js**
+### Full-Stack Framework
+- **Next.js 14** - App Router with API routes
+- **React 18** with **TypeScript**
 - **MongoDB** with **Mongoose** ODM
-- **TypeScript** for type safety
 - **JWT** for authentication
 - **Multer** for file uploads
 - **bcryptjs** for password hashing
 
 ### Frontend
-- **React** with **TypeScript**
-- **Vite** for build tooling
-- **TailwindCSS** for styling
+- **TailwindCSS** for styling with glassmorphism effects
 - **Radix UI** components
 - **Tanstack Query** for data fetching
-- **Wouter** for routing
+- **Lucide React** icons
+- **Framer Motion** for animations
+- **Recharts** for data visualization
 
 ## 🚀 Getting Started
 
@@ -75,9 +81,9 @@ CIVIL360 est une plateforme intégrée de gestion des projets de génie civil qu
 
 - **Node.js** (v18 or later)
 - **MongoDB** (v6 or later)
-- **npm** or **yarn**
+- **npm** (v9 or later)
 
-### Installation
+### Quick Start
 
 1. **Clone the repository**
    ```bash
@@ -90,98 +96,103 @@ CIVIL360 est une plateforme intégrée de gestion des projets de génie civil qu
    npm install
    ```
 
-3. **Set up MongoDB**
-   
-   **Option A: Local MongoDB**
-   - Install MongoDB locally
-   - Start MongoDB service
-   - Database will be created automatically
-
-   **Option B: MongoDB Atlas (Cloud)**
-   - Create a MongoDB Atlas account
-   - Create a new cluster
-   - Get your connection string
-
-4. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` file with your configuration:
+3. **Configure environment variables**
+   Create a `.env` file in the root directory:
    ```env
    # MongoDB Configuration
-   MONGODB_URI=mongodb://localhost:27017/civil360
-   # Or for MongoDB Atlas:
-   # MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/civil360
+   MONGODB_URI=mongodb://127.0.0.1:27017/civil360
 
    # JWT Configuration
    JWT_SECRET=your-super-secret-jwt-key-change-in-production
    JWT_EXPIRES_IN=7d
 
    # Server Configuration
-   PORT=5000
    NODE_ENV=development
    ```
 
-5. **Start the application**
-   
-   **Development mode:**
+4. **Populate the database** (first time only)
+   ```bash
+   npm run populate
+   ```
+   This creates sample data including users, projects, equipment, and more.
+
+5. **Start the development server**
    ```bash
    npm run dev
    ```
    
-   **Production mode:**
+   The application runs on: **http://localhost:3000**
+
+6. **Build for production**
    ```bash
    npm run build
    npm start
    ```
 
-6. **Access the application**
-   - Frontend: http://localhost:5000
-   - API: http://localhost:5000/api
+### Default Login Credentials (Development)
+The app uses mock authentication in development mode. Access different dashboards:
+- General Director: http://localhost:3000/dashboard/general-director
+- Project Engineer: http://localhost:3000/dashboard/project-engineer
+- Purchasing Manager: http://localhost:3000/dashboard/purchasing
+- Logistics Manager: http://localhost:3000/dashboard/equipment
 
 ## 📁 Project Structure
 
 ```
 Civil360/
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Page components
-│   │   ├── lib/            # Utility libraries
-│   │   └── App.tsx         # Main app component
-├── server/                 # Express backend
-│   ├── config/             # Database and app configuration
-│   ├── middleware/         # Express middleware
-│   ├── models/             # MongoDB/Mongoose models
-│   ├── routes/             # API route handlers
-│   ├── index.ts            # Main server file
-│   └── storage-mongo.ts    # MongoDB storage layer
-├── shared/                 # Shared code between client/server
-│   └── schema.ts           # Database schemas and types
-├── uploads/                # File upload directory
-└── .env                    # Environment variables
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── api/               # API Routes (Backend)
+│   │   │   ├── auth/         # Authentication endpoints
+│   │   │   ├── dashboard/    # Dashboard data endpoints
+│   │   │   ├── projects/     # Project management API
+│   │   │   ├── equipment/    # Equipment management API
+│   │   │   ├── purchasing/   # Purchase orders API
+│   │   │   └── notifications/# Notifications API
+│   │   ├── dashboard/        # Dashboard pages
+│   │   ├── login/           # Login page
+│   │   ├── layout.tsx       # Root layout
+│   │   └── page.tsx         # Home page
+│   ├── components/          # React components
+│   │   ├── ui/             # Base UI components (shadcn/ui)
+│   │   └── [features]/     # Feature-specific components
+│   ├── lib/                # Utilities and helpers
+│   │   ├── auth-helpers.ts # Authentication for API routes
+│   │   └── db-init.ts     # Database initialization
+│   ├── server/            # Backend logic
+│   │   ├── models/       # Mongoose models
+│   │   ├── config/       # Database configuration
+│   │   └── storage-mongo.ts # MongoDB storage layer
+│   ├── contexts/         # React contexts
+│   └── hooks/           # Custom React hooks
+├── shared/              # Shared schemas and types
+│   └── schema.ts       # Database schemas
+├── uploads/            # File upload directory
+├── populate.js        # Database seeding script
+├── package.json       # Dependencies (type: module)
+├── next.config.mjs   # Next.js configuration
+└── .env              # Environment variables
 ```
 
 ## 🔐 Authentication
 
 The application uses JWT (JSON Web Tokens) for authentication:
 
-### Endpoints
+### API Endpoints
 
 - **POST** `/api/auth/register` - Register new user
 - **POST** `/api/auth/login` - User login
+- **POST** `/api/auth/mock-login` - Mock login (development only)
 - **GET** `/api/auth/me` - Get current user profile
 - **PUT** `/api/auth/me` - Update user profile
 - **PUT** `/api/auth/change-password` - Change password
 - **POST** `/api/auth/refresh` - Refresh token
 
-### Default User
+### Development Mode
+In development, the app uses mock authentication. No login required - just navigate to any dashboard URL and you'll be auto-authenticated based on the URL path.
 
-After starting the application, a default user will be created:
-- **Username**: `marc.dubois`
-- **Password**: `password`
-- **Role**: `Chef d'Exécution`
+### Production Mode
+In production, proper JWT authentication is enforced. Users must register/login to access protected routes.
 
 ## 📡 API Documentation
 

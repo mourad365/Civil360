@@ -5,3 +5,12 @@ server/public
 vite.config.ts.*
 *.tar.gz
 .env
+.env.local
+
+# Next.js
+.next
+out
+next-env.d.ts
+
+# Build
+build

@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Modern Dashboard Theme - Light Mode */
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(215, 25%, 10%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(215, 25%, 10%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(215, 25%, 10%);
+  
+  /* Dark Navy Primary */
+  --primary: hsl(215, 50%, 15%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  
+  /* Professional Secondary Colors */
+  --secondary: hsl(210, 20%, 95%);
+  --secondary-foreground: hsl(215, 25%, 10%);
+  
+  --muted: hsl(210, 20%, 96%);
+  --muted-foreground: hsl(215, 16%, 46%);
+  
+  /* Light Gray Accent */
+  --accent: hsl(210, 20%, 95%);
+  --accent-foreground: hsl(215, 25%, 10%);
+  
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(210, 20%, 90%);
+  --input: hsl(210, 20%, 94%);
+  --ring: hsl(207, 90%, 40%);
+  
+  /* Modern Dashboard chart colors */
+  --chart-1: hsl(215, 80%, 45%); /* Professional Blue */
+  --chart-2: hsl(45, 90%, 55%);  /* Golden Yellow */
+  --chart-3: hsl(142, 76%, 36%); /* Success Green */
+  --chart-4: hsl(0, 84%, 60%);   /* Warning Red */
+  --chart-5: hsl(280, 60%, 50%); /* Purple Accent */
+  
+  /* Dark Navy Sidebar with Glassmorphism */
+  --sidebar: hsl(215, 50%, 12%);
+  --sidebar-foreground: hsl(0, 0%, 95%);
+  --sidebar-primary: hsl(215, 80%, 45%);
+  --sidebar-primary-foreground: hsl(0, 0%, 98%);
+  --sidebar-accent: hsl(45, 90%, 55%);
+  --sidebar-accent-foreground: hsl(215, 50%, 12%);
+  --sidebar-border: hsl(215, 30%, 20%);
+  --sidebar-ring: hsl(215, 80%, 45%);
+  
+  --font-sans: 'Inter', 'Roboto', ui-sans-serif, system-ui;
+  --radius: 12px;
+  
+  /* Construction-specific colors */
+  --construction-steel: hsl(207, 90%, 40%);
+  --construction-orange: hsl(32, 100%, 50%);
+  --construction-concrete: hsl(200, 12%, 88%);
+  --construction-earth: hsl(30, 30%, 60%);
+  --construction-safety-green: hsl(142, 76%, 36%);
+  --construction-warning: hsl(45, 100%, 55%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+}
+
+/* Glassmorphism effects */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+}
+
+.glass-sidebar {
+  background: rgba(28, 32, 50, 0.95);
+  backdrop-filter: blur(25px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.glass-navbar {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
