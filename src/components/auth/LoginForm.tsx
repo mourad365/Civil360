@@ -19,7 +19,7 @@ export default function LoginForm() {
   // Redirect if already authenticated
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace('/');
+      router.replace('/dashboard');
     }
   }, [isLoading, isAuthenticated, router]);
 
@@ -39,7 +39,7 @@ export default function LoginForm() {
       if (res.ok) {
         const data = await res.json();
         login(data.token, data.user);
-        router.push('/');
+        router.push('/dashboard');
         return;
       }
 
@@ -57,7 +57,7 @@ export default function LoginForm() {
 
       const mockData = await mockRes.json();
       login(mockData.token, mockData.user);
-      router.push('/');
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Échec de la connexion');
     } finally {

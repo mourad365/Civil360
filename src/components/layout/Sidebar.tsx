@@ -15,7 +15,8 @@ import {
   BarChart3, 
   FileText, 
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Calculator
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -62,6 +63,13 @@ const sidebarItems: SidebarItem[] = [
     icon: BarChart3,
     label: 'Analyses',
     path: '/analytics',
+    roles: ['general_director', 'project_engineer', 'purchasing_manager', 'logistics_manager']
+  },
+  {
+    id: 'etude-quantitative',
+    icon: Calculator,
+    label: 'Étude Quantitative',
+    path: '/etude-quantitative',
     roles: ['general_director', 'project_engineer', 'purchasing_manager', 'logistics_manager']
   },
   {

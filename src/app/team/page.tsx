@@ -180,7 +180,7 @@ export default function TeamPage() {
                 <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                   <div className="flex items-center space-x-4 flex-1">
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-                      <span className="text-white font-semibold text-lg">
+                      <span className="text-black font-semibold text-lg">
                         {member.name.charAt(0)}
                       </span>
                     </div>
