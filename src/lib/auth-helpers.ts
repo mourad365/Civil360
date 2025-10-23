@@ -75,7 +75,7 @@ export async function getAuthUser(req: NextRequest): Promise<AuthUser | null> {
       username: user.username,
       name: user.name,
       role: user.role,
-      email: user.email
+      email: user.email ?? undefined
     };
   } catch (error) {
     return null;

@@ -100,7 +100,7 @@ export async function GET(req: NextRequest) {
       const endDate = (project as any).calendrier?.date_fin_prevue as Date | undefined;
       const daysRemaining = endDate 
         ? Math.ceil((endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
-        : 0;
+        : null;
 
       const openRisks = 0;
 
