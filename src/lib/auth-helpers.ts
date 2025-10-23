@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import jwt from 'jsonwebtoken';
-import { mongoStorage } from '../server/storage-mongo';
+import jwt, { type Secret, type SignOptions } from 'jsonwebtoken';
+import UserModel from '../server/models/User';
 import { initDB } from './db-init';
 
 export interface AuthUser {
@@ -64,14 +64,14 @@ export async function getAuthUser(req: NextRequest): Promise<AuthUser | null> {
 
     const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
     const decoded = jwt.verify(token, JWT_SECRET) as any;
-    const user = await mongoStorage.getUser(decoded.id);
+    const user = await UserModel.findById(decoded.id);
 
     if (!user) {
       return null;
     }
 
     return {
-      id: user.id,
+      id: (user as any)._id.toString(),
       username: user.username,
       name: user.name,
       role: user.role,
@@ -93,17 +93,19 @@ export async function requireAuth(req: NextRequest): Promise<AuthUser> {
 }
 
 export function generateToken(user: any): string {
-  const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
-  const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+  const JWT_SECRET: Secret = process.env.JWT_SECRET ?? 'fallback-secret-key';
+  const JWT_EXPIRES_IN: SignOptions['expiresIn'] = (process.env.JWT_EXPIRES_IN ?? '7d') as SignOptions['expiresIn'];
+
+  const options: SignOptions = { expiresIn: JWT_EXPIRES_IN };
 
   return jwt.sign(
-    { 
-      id: user.id, 
+    {
+      id: user.id,
       username: user.username,
-      role: user.role 
+      role: user.role
     },
     JWT_SECRET,
-    { expiresIn: JWT_EXPIRES_IN }
+    options
   );
 }
 

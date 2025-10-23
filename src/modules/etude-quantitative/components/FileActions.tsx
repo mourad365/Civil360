@@ -258,7 +258,8 @@ export function FileActions({
                 // Simuler l'attribut accept pour JSON
                 if (fileInputRef.current) {
                   fileInputRef.current.accept = '.json';
-                  fileInputRef.current.onchange = handleImportJSON;
+                  fileInputRef.current.onchange = (ev: Event) =>
+                    handleImportJSON(ev as unknown as React.ChangeEvent<HTMLInputElement>);
                 }
               }}
             >
@@ -271,7 +272,8 @@ export function FileActions({
                 // Simuler l'attribut accept pour Excel
                 if (fileInputRef.current) {
                   fileInputRef.current.accept = '.xlsx,.xls';
-                  fileInputRef.current.onchange = handleImportExcel;
+                  fileInputRef.current.onchange = (ev: Event) =>
+                    handleImportExcel(ev as unknown as React.ChangeEvent<HTMLInputElement>);
                 }
               }}
             >

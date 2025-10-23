@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, getAuthUser } from '@/lib/auth-helpers';
-import { mongoStorage } from '@/server/storage-mongo';
 import Project from '@/server/models/Project';
 
 export async function GET(
@@ -40,7 +39,7 @@ export async function PUT(
     await requireAuth(req);
     const body = await req.json();
     
-    const project = await mongoStorage.updateProject(params.id, body);
+    const project = await Project.findByIdAndUpdate(params.id, body, { new: true });
     return NextResponse.json(project);
   } catch (error: any) {
     if (error.message === 'Authentication required') {

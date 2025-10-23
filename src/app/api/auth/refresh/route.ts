@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, generateToken } from '@/lib/auth-helpers';
-import { mongoStorage } from '@/server/storage-mongo';
+import UserModel from '@/server/models/User';
 
 export async function POST(req: NextRequest) {
   try {
     const authUser = await requireAuth(req);
-    const user = await mongoStorage.getUser(authUser.id);
+    const user = await UserModel.findById(authUser.id);
     
     if (!user) {
       return NextResponse.json(
