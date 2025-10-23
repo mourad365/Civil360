@@ -9,18 +9,17 @@ export async function GET(req: NextRequest) {
     await requireAuth(req);
 
     const activeProjects = await Project.countDocuments({ 
-      status: 'in_progress', 
-      isActive: true 
+      statut: 'en_cours'
     });
 
     const budgetStats = await Project.aggregate([
-      { $match: { isActive: true } },
+      { $match: {} },
       {
         $group: {
           _id: null,
-          totalBudget: { $sum: '$budget.estimated' },
-          allocatedBudget: { $sum: '$budget.allocated' },
-          spentBudget: { $sum: '$budget.spent' }
+          totalBudget: { $sum: '$budget.total_alloue' },
+          allocatedBudget: { $sum: '$budget.total_alloue' },
+          spentBudget: { $sum: '$budget.total_depense' }
         }
       }
     ]);
@@ -31,11 +30,11 @@ export async function GET(req: NextRequest) {
       : 0;
 
     const progressStats = await Project.aggregate([
-      { $match: { isActive: true } },
+      { $match: {} },
       {
         $group: {
           _id: null,
-          avgProgress: { $avg: '$progress.overall' }
+          avgProgress: { $avg: '$avancement.pourcentage_global' }
         }
       }
     ]);
@@ -43,12 +42,11 @@ export async function GET(req: NextRequest) {
     const overallProgress = progressStats[0]?.avgProgress || 0;
 
     const delayedProjects = await Project.countDocuments({
-      'dates.endDate': { $lt: new Date() },
-      status: { $in: ['planning', 'in_progress'] },
-      isActive: true
+      'calendrier.date_fin_prevue': { $lt: new Date() },
+      statut: { $in: ['planification', 'en_cours'] }
     });
 
-    const totalProjects = await Project.countDocuments({ isActive: true });
+    const totalProjects = await Project.countDocuments({});
     const onTimePerformance = totalProjects > 0 
       ? ((totalProjects - delayedProjects) / totalProjects) * 100 
       : 100;
@@ -62,74 +60,75 @@ export async function GET(req: NextRequest) {
     });
 
     const projectStatusMap = await Project.find({
-      isActive: true,
-      'location.coordinates.lat': { $exists: true },
-      'location.coordinates.lng': { $exists: true }
-    }).select('name code status priority progress location dates');
+      'localisation.coordonnees.latitude': { $exists: true },
+      'localisation.coordonnees.longitude': { $exists: true }
+    }).select('nom code statut avancement localisation calendrier');
 
     const mapProjects = projectStatusMap.map(project => {
       let statusColor = '#22c55e';
       
-      if ((project.dates as any).endDate < new Date() && project.status !== 'completed') {
+      if ((project as any).calendrier?.date_fin_prevue < new Date() && (project as any).statut !== 'termine') {
         statusColor = '#ef4444';
-      } else if ((project.progress as any).overall < 50) {
+      } else if ((project as any).avancement?.pourcentage_global < 50) {
         statusColor = '#f59e0b';
       }
 
       return {
         id: project._id,
-        name: project.name,
+        name: (project as any).nom,
         code: project.code,
-        status: project.status,
-        priority: project.priority,
-        progress: (project.progress as any).overall,
-        coordinates: (project.location as any).coordinates,
+        status: (project as any).statut,
+        priority: 'medium',
+        progress: (project as any).avancement?.pourcentage_global,
+        coordinates: (project as any).localisation?.coordonnees,
         statusColor
       };
     });
 
-    const detailedProjects = await Project.find({ isActive: true })
-      .populate('team.projectManager', 'name')
-      .select('name code status priority progress budget dates location risks')
-      .sort({ 'dates.startDate': -1 })
+    const detailedProjects = await Project.find({})
+      .select('nom code statut avancement budget calendrier localisation')
+      .sort({ 'calendrier.date_debut': -1 })
       .limit(20);
 
     const projectsWithMetrics = detailedProjects.map(project => {
-      const budgetUsage = (project.budget as any).allocated > 0 
-        ? ((project.budget as any).spent / (project.budget as any).allocated) * 100 
+      const allocated = (project as any).budget?.total_alloue || 0;
+      const spent = (project as any).budget?.total_depense || 0;
+      const budgetUsage = allocated > 0 
+        ? (spent / allocated) * 100 
         : 0;
 
-      const daysRemaining = Math.ceil(
-        ((project.dates as any).endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
-      );
+      const endDate = (project as any).calendrier?.date_fin_prevue as Date | undefined;
+      const daysRemaining = endDate 
+        ? Math.ceil((endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+        : 0;
 
-      const openRisks = (project.risks || []).filter((r: any) => r.status === 'open').length;
+      const openRisks = 0;
 
       return {
         id: project._id,
-        name: project.name,
+        name: (project as any).nom,
         code: project.code,
-        status: project.status,
-        progress: (project.progress as any).overall,
+        status: (project as any).statut,
+        progress: (project as any).avancement?.pourcentage_global,
         budgetUsage: Math.round(budgetUsage),
-        budgetSpent: (project.budget as any).spent,
-        budgetAllocated: (project.budget as any).allocated,
+        budgetSpent: spent,
+        budgetAllocated: allocated,
         daysRemaining,
-        location: (project.location as any).address,
-        manager: (project.team as any).projectManager,
+        location: (project as any).localisation?.adresse,
+        manager: undefined,
         openRisks
       };
     });
 
     const budgetBreakdown = await Project.aggregate([
-      { $match: { isActive: true } },
+      { $match: {} },
       {
         $group: {
           _id: null,
-          labor: { $sum: '$budget.labor' },
-          materials: { $sum: '$budget.materials' },
-          equipment: { $sum: '$budget.equipment' },
-          contingency: { $sum: '$budget.contingency' }
+          labor: { $sum: '$budget.repartition.main_oeuvre.depense' },
+          materials: { $sum: '$budget.repartition.materiaux.depense' },
+          equipment: { $sum: '$budget.repartition.equipements.depense' },
+          contingency: { $sum: '$budget.repartition.imprevus.depense' }
         }
       }
     ]);
