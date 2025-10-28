@@ -47,22 +47,12 @@ Make sure these 6 variables exist:
 
 | Variable | Value |
 |----------|-------|
-| `MONGODB_URI` | `mongodb+srv://mourad2:mourad2@cluster0.mwhno36.mongodb.net/?retryWrites=true&w=majority` |
+| `MONGODB_URI` | `mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority` |
 | `MONGODB_DB_NAME` | `civil360` |
-| `JWT_SECRET` | `civil360-super-secret-jwt-key-2024-production-ready` |
+| `JWT_SECRET` | `your-secure-jwt-secret-key-here` |
 | `JWT_EXPIRES_IN` | `7d` |
 | `NODE_ENV` | `production` |
-| `SESSION_SECRET` | `your-super-secret-session-key-change-in-production` |
-
----
-
-## 🔍 How to Verify It's Fixed
-
-After redeployment (wait 2-5 minutes):
-
-1. **Open** https://civil360.netlify.app
-2. **Press F12** to open DevTools
-3. **Go to Network tab**
+| `SESSION_SECRET` | `your-secure-session-secret-key-here` |
 4. **Try to login** with any credentials
 5. **Check the Network tab:**
    - ✅ Should see: `POST /api/auth/login` → **200** (success) or **401** (wrong password)
