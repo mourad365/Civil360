@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateToken } from '@/lib/auth-helpers';
 import UserModel from '@/server/models/User';
+import { initDB } from '@/lib/db-init';
 
 export async function POST(req: NextRequest) {
   try {
+    // Initialize database connection
+    await initDB();
+
     const { username, password } = await req.json();
 
     // Validation
@@ -49,8 +53,17 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error('Login error:', error);
+    
+    // Check if it's a database connection error
+    if (error.message?.includes('connect') || error.message?.includes('ECONNREFUSED')) {
+      return NextResponse.json(
+        { error: 'Service de base de données indisponible. Veuillez contacter l\'administrateur.' },
+        { status: 503 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to login', details: error.message },
+      { error: 'Échec de la connexion', details: error.message },
       { status: 500 }
     );
   }
