@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateToken } from '@/lib/auth-helpers';
 import UserModel from '@/server/models/User';
+import { initDB } from '@/lib/db-init';
 
 export async function POST(req: NextRequest) {
   try {
+    // Ensure DB connection (important in serverless/Netlify)
+    await initDB();
+
     const { username, password, name, role, email } = await req.json();
 
     // Validation
