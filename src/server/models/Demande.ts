@@ -109,4 +109,4 @@ DemandeSchema.index({ statut: 1 });
 DemandeSchema.index({ priorite: 1 });
 DemandeSchema.index({ 'demandeur.utilisateur_id': 1 });
 
-export default mongoose.model<IDemande>('Demande', DemandeSchema);
+export default mongoose.models.Demande || mongoose.model<IDemande>('Demande', DemandeSchema);

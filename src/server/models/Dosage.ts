@@ -126,4 +126,4 @@ DosageSchema.index({ usage: 1 });
 DosageSchema.index({ is_default: 1 });
 DosageSchema.index({ is_active: 1 });
 
-export default mongoose.model<IDosage>('Dosage', DosageSchema);
+export default mongoose.models.Dosage || mongoose.model<IDosage>('Dosage', DosageSchema);

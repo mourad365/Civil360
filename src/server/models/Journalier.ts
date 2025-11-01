@@ -145,4 +145,4 @@ JournalierSchema.index({ date_rapport: 1 });
 JournalierSchema.index({ redige_par: 1 });
 JournalierSchema.index({ 'meteo.condition': 1 });
 
-export default mongoose.model<IJournalier>('Journalier', JournalierSchema);
+export default mongoose.models.Journalier || mongoose.model<IJournalier>('Journalier', JournalierSchema);

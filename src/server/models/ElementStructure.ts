@@ -235,4 +235,4 @@ ElementStructureSchema.index({ projet_id: 1 });
 ElementStructureSchema.index({ chantier_id: 1 });
 ElementStructureSchema.index({ type_element: 1 });
 
-export default mongoose.model<IElementStructure>('ElementStructure', ElementStructureSchema);
+export default mongoose.models.ElementStructure || mongoose.model<IElementStructure>('ElementStructure', ElementStructureSchema);

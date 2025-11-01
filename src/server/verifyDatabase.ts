@@ -28,7 +28,7 @@ const verifyDatabase = async () => {
     const counts = {
       roles: await Role.countDocuments(),
       permissions: await Permission.countDocuments(),
-      utilisateurs: await Utilisateur.countDocuments(),
+      Users: await Utilisateur.countDocuments(),
       fournisseurs: await SousTraitant.countDocuments(),
       materiaux: await Materiau.countDocuments(),
       dosages: await Dosage.countDocuments(),
@@ -43,7 +43,7 @@ const verifyDatabase = async () => {
 
     console.log(`✅ Rôles: ${counts.roles}`);
     console.log(`✅ Permissions: ${counts.permissions}`);
-    console.log(`✅ Utilisateurs: ${counts.utilisateurs}`);
+    console.log(`✅ Users: ${counts.Users}`);
     console.log(`✅ Fournisseurs: ${counts.fournisseurs}`);
     console.log(`✅ Matériaux: ${counts.materiaux}`);
     console.log(`✅ Dosages: ${counts.dosages}`);

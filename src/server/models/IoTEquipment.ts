@@ -31,4 +31,4 @@ const IoTEquipmentSchema: Schema = new Schema({
 IoTEquipmentSchema.index({ projectId: 1 });
 IoTEquipmentSchema.index({ status: 1 });
 
-export default mongoose.model<IIoTEquipment>('IoTEquipment', IoTEquipmentSchema);
+export default mongoose.models.IoTEquipment || mongoose.model<IIoTEquipment>('IoTEquipment', IoTEquipmentSchema);

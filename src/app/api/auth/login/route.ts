@@ -2,11 +2,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateToken } from '@/lib/auth-helpers';
 import UserModel from '@/server/models/User';
 import { initDB } from '@/lib/db-init';
+import db from '@/server/config/database';
 
 export async function POST(req: NextRequest) {
   try {
     // Initialize database connection
     await initDB();
+    
+    console.log('Database name:', UserModel.db?.name);
+    console.log('Collection name:', UserModel.collection.name);
+    console.log('Global connection db:', db.connection.db?.databaseName);
+    
+    // Count total users in collection
+    const totalUsers = await UserModel.countDocuments();
+    console.log('Total users in collection:', totalUsers);
 
     const { username, password } = await req.json();
 
@@ -20,6 +29,16 @@ export async function POST(req: NextRequest) {
 
     // Find user by username
     const user = await UserModel.findOne({ username }).select('+password');
+    
+    console.log('User found:', user ? 'Yes' : 'No');
+    console.log('Username searched:', username);
+    
+    if (!user) {
+      // Debug: Try to find any user to see what's in the collection
+      const anyUser = await UserModel.findOne().select('username email');
+      console.log('Sample user in collection:', anyUser);
+    }
+    
     if (!user) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
@@ -27,8 +46,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    console.log('User has password field:', !!user.password);
+    console.log('Password hash starts with:', user.password?.substring(0, 10));
+    console.log('Attempting to compare password...');
+
     // Check password
     const isValidPassword = await user.comparePassword(password);
+    
+    console.log('Password valid:', isValidPassword);
+    
     if (!isValidPassword) {
       return NextResponse.json(
         { error: 'Invalid credentials' },

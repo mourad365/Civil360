@@ -7,10 +7,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/civil360';
+const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME || 'civil360';
 
 export const connectDB = async (): Promise<void> => {
   try {
     const conn = await mongoose.connect(MONGODB_URI, {
+      dbName: MONGODB_DB_NAME,
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
@@ -18,6 +20,7 @@ export const connectDB = async (): Promise<void> => {
     });
     
     console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log(`Using database: ${conn.connection.db?.databaseName || MONGODB_DB_NAME}`);
     
     // Handle connection events
     mongoose.connection.on('error', (err) => {

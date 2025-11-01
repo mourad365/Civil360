@@ -32,4 +32,4 @@ const QualityCheckSchema: Schema = new Schema({
 
 QualityCheckSchema.index({ projectId: 1, createdAt: -1 });
 
-export default mongoose.model<IQualityCheck>('QualityCheck', QualityCheckSchema);
+export default mongoose.models.QualityCheck || mongoose.model<IQualityCheck>('QualityCheck', QualityCheckSchema);

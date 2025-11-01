@@ -22,4 +22,4 @@ const OdooSyncSchema: Schema = new Schema({
 
 OdooSyncSchema.index({ entityType: 1, entityId: 1 });
 
-export default mongoose.model<IOdooSync>('OdooSync', OdooSyncSchema);
+export default mongoose.models.OdooSync || mongoose.model<IOdooSync>('OdooSync', OdooSyncSchema);

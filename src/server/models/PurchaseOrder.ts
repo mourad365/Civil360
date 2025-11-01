@@ -133,4 +133,4 @@ PurchaseOrderSchema.index({ supplier: 1 });
 PurchaseOrderSchema.index({ status: 1 });
 PurchaseOrderSchema.index({ 'dates.expectedDelivery': 1 });
 
-export default mongoose.model<IPurchaseOrder>('PurchaseOrder', PurchaseOrderSchema);
+export default mongoose.models.PurchaseOrder || mongoose.model<IPurchaseOrder>('PurchaseOrder', PurchaseOrderSchema);

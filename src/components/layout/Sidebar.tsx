@@ -93,8 +93,9 @@ const Sidebar: React.FC = () => {
   const { t } = useLanguage();
   const pathname = usePathname();
 
-  const filteredItems = sidebarItems.filter(item => 
-    user?.role && item.roles.includes(user.role)
+  const userRole = user?.role?.toLowerCase();
+  const filteredItems = sidebarItems.filter(item =>
+    userRole === 'admin' || (userRole ? item.roles.includes(userRole) : false)
   );
 
   const handleLogout = () => {

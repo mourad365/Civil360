@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Auth Data</title>
+</head>
+<body>
+    <h1>Clearing Authentication Data...</h1>
+    <script>
+        localStorage.removeItem('civil360_token');
+        localStorage.removeItem('civil360_user');
+        document.body.innerHTML += '<p style="color: green;">✓ Authentication data cleared!</p>';
+        document.body.innerHTML += '<p>You can close this tab and refresh your app.</p>';
+    </script>
+</body>
+</html>

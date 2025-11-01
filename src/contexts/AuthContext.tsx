@@ -57,22 +57,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.removeItem('civil360_token');
         localStorage.removeItem('civil360_user');
       }
-    } else if (process.env.NODE_ENV === 'development') {
-      // Auto-login in development mode
-      console.log('Development mode: Auto-login enabled');
-      const mockUser = {
-        id: '507f1f77bcf86cd799439011',
-        username: 'directeur.general',
-        name: 'Directeur Général Mock',
-        role: 'general_director',
-        email: 'dg@civil360.ma'
-      };
-      
-      const mockToken = 'mock-token-development';
-      setToken(mockToken);
-      setUser(mockUser);
-      localStorage.setItem('civil360_token', mockToken);
-      localStorage.setItem('civil360_user', JSON.stringify(mockUser));
     }
     
     setIsLoading(false);

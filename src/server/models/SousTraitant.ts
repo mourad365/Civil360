@@ -152,4 +152,4 @@ SousTraitantSchema.index({ categories: 1 });
 SousTraitantSchema.index({ is_active: 1 });
 SousTraitantSchema.index({ 'performance.note_globale': -1 });
 
-export default mongoose.model<ISousTraitant>('SousTraitant', SousTraitantSchema);
+export default mongoose.models.SousTraitant || mongoose.model<ISousTraitant>('SousTraitant', SousTraitantSchema);

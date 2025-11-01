@@ -74,10 +74,10 @@ async function setupDatabase() {
     const roleIds = Object.values(roles.insertedIds);
     
     // ========================================
-    // 2. UTILISATEURS
+    // 2. Users
     // ========================================
     console.log("\n👥 Creating users...");
-    const users = await db.collection('utilisateurs').insertMany([
+    const users = await db.collection('Users').insertMany([
       {
         _id: new ObjectId(),
         username: "admin",
@@ -862,11 +862,11 @@ async function setupDatabase() {
     await db.collection('demandes').createIndex({ statut: 1, priorite: 1 });
     console.log("  ✓ Demandes indexes created");
     
-    // Utilisateurs indexes
-    await db.collection('utilisateurs').createIndex({ username: 1 }, { unique: true });
-    await db.collection('utilisateurs').createIndex({ email: 1 }, { unique: true });
-    await db.collection('utilisateurs').createIndex({ role_id: 1, is_active: 1 });
-    console.log("  ✓ Utilisateurs indexes created");
+    // Users indexes
+    await db.collection('Users').createIndex({ username: 1 }, { unique: true });
+    await db.collection('Users').createIndex({ email: 1 }, { unique: true });
+    await db.collection('Users').createIndex({ role_id: 1, is_active: 1 });
+    console.log("  ✓ Users indexes created");
     
     // Roles indexes
     await db.collection('roles').createIndex({ code: 1 }, { unique: true });

@@ -26,4 +26,4 @@ const AiPlanAnalysisSchema: Schema = new Schema({
 
 AiPlanAnalysisSchema.index({ projectId: 1, createdAt: -1 });
 
-export default mongoose.model<IAiPlanAnalysis>('AiPlanAnalysis', AiPlanAnalysisSchema);
+export default mongoose.models.AiPlanAnalysis || mongoose.model<IAiPlanAnalysis>('AiPlanAnalysis', AiPlanAnalysisSchema);

@@ -20,4 +20,4 @@ const MobileSyncQueueSchema: Schema = new Schema({
 
 MobileSyncQueueSchema.index({ synced: 1, createdAt: 1 });
 
-export default mongoose.model<IMobileSyncQueue>('MobileSyncQueue', MobileSyncQueueSchema);
+export default mongoose.models.MobileSyncQueue || mongoose.model<IMobileSyncQueue>('MobileSyncQueue', MobileSyncQueueSchema);

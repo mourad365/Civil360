@@ -58,7 +58,7 @@ export interface IPermission extends Document {
       validation: boolean;
       export: boolean;
     };
-    utilisateurs: {
+    Users: {
       lecture: boolean;
       ecriture: boolean;
       gestion_roles: boolean;
@@ -137,7 +137,7 @@ const PermissionSchema: Schema = new Schema({
       validation: { type: Boolean, default: false },
       export: { type: Boolean, default: false }
     },
-    utilisateurs: {
+    Users: {
       lecture: { type: Boolean, default: false },
       ecriture: { type: Boolean, default: false },
       gestion_roles: { type: Boolean, default: false },
@@ -163,4 +163,4 @@ const PermissionSchema: Schema = new Schema({
 // Index pour améliorer les performances
 PermissionSchema.index({ role_id: 1 });
 
-export default mongoose.model<IPermission>('Permission', PermissionSchema);
+export default mongoose.models.Permission || mongoose.model<IPermission>('Permission', PermissionSchema);

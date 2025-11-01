@@ -116,4 +116,4 @@ AchatSchema.index({ statut: 1 });
 AchatSchema.index({ 'dates.date_commande': 1 });
 AchatSchema.index({ 'dates.date_livraison_demandee': 1 });
 
-export default mongoose.model<IAchat>('Achat', AchatSchema);
+export default mongoose.models.Achat || mongoose.model<IAchat>('Achat', AchatSchema);

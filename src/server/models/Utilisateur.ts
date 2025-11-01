@@ -21,7 +21,7 @@ export interface IUtilisateur extends Document {
   is_active: boolean;
 }
 
-const UtilisateurSchema: Schema = new Schema({
+const Userschema: Schema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password_hash: { type: String, required: true },
@@ -53,10 +53,10 @@ const UtilisateurSchema: Schema = new Schema({
 });
 
 // Index pour améliorer les performances
-UtilisateurSchema.index({ username: 1 });
-UtilisateurSchema.index({ email: 1 });
-UtilisateurSchema.index({ 'profil.role_id': 1 });
-UtilisateurSchema.index({ 'profil.departement': 1 });
-UtilisateurSchema.index({ is_active: 1 });
+Userschema.index({ username: 1 });
+Userschema.index({ email: 1 });
+Userschema.index({ 'profil.role_id': 1 });
+Userschema.index({ 'profil.departement': 1 });
+Userschema.index({ is_active: 1 });
 
-export default mongoose.model<IUtilisateur>('Utilisateur', UtilisateurSchema);
+export default mongoose.models.Utilisateur || mongoose.model<IUtilisateur>('Utilisateur', Userschema);

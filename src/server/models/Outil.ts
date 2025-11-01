@@ -199,4 +199,4 @@ OutilSchema.index({ statut: 1 });
 OutilSchema.index({ 'localisation.projet_actuel_id': 1 });
 OutilSchema.index({ 'propriete.type': 1 });
 
-export default mongoose.model<IOutil>('Outil', OutilSchema);
+export default mongoose.models.Outil || mongoose.model<IOutil>('Outil', OutilSchema);
