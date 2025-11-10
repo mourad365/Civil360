@@ -6,7 +6,7 @@
 > ✅ No Vite, no separate backend/frontend servers
 > ✅ Unified codebase with Next.js API routes
 
-CIVIL360 est une plateforme intégrée de gestion des projets de génie civil qui centralise l'information, synchronise les actions et optimise les ressources. Conçue pour différents profils d'utilisateurs avec des interfaces spécialisées et support multilingue complet (Français/العربية/English).
+CIVIL360 est une plateforme intégrée de gestion des projets de génie civil qui centralise l'information, synchronise les actions et optimise les ressources. Conçue pour différents profils d'Users avec des interfaces spécialisées et support multilingue complet (Français/العربية/English).
 
 ##  Objectifs principaux
 -  **Réduction des délais ≤ 15%**

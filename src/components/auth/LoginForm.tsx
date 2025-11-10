@@ -19,7 +19,7 @@ export default function LoginForm() {
   // Redirect if already authenticated
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace('/');
+      router.replace('/dashboard');
     }
   }, [isLoading, isAuthenticated, router]);
 
@@ -29,37 +29,23 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      // Try real login first
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        login(data.token, data.user);
-        router.push('/');
-        return;
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ error: 'Échec de la connexion' }));
+        throw new Error(errorData.error || 'Identifiants invalides');
       }
 
-      // Fallback to mock-login in development
-      const mockRes = await fetch('/api/auth/mock-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role: 'general_director' }),
-      });
-
-      if (!mockRes.ok) {
-        const err = await mockRes.json().catch(() => ({}));
-        throw new Error(err.error || 'Échec de la connexion');
-      }
-
-      const mockData = await mockRes.json();
-      login(mockData.token, mockData.user);
-      router.push('/');
+      const data = await res.json();
+      login(data.token, data.user);
+      router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Échec de la connexion');
+      console.error('Login error:', err);
+      setError(err.message || 'Échec de la connexion. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }

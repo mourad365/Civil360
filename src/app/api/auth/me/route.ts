@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth-helpers';
-import { mongoStorage } from '@/server/storage-mongo';
 import UserModel from '@/server/models/User';
 
 export async function GET(req: NextRequest) {
   try {
     const authUser = await requireAuth(req);
-    const user = await mongoStorage.getUser(authUser.id);
+    const user = await UserModel.findById(authUser.id);
     
     if (!user) {
       return NextResponse.json(
@@ -17,7 +16,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       user: {
-        id: user.id,
+        id: user._id,
         username: user.username,
         name: user.name,
         role: user.role,

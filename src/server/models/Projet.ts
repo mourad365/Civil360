@@ -176,4 +176,4 @@ ProjetSchema.index({ statut: 1 });
 ProjetSchema.index({ 'calendrier.date_debut': 1, 'calendrier.date_fin_prevue': 1 });
 ProjetSchema.index({ 'localisation.coordonnees': '2dsphere' });
 
-export default mongoose.model<IProjet>('Projet', ProjetSchema);
+export default mongoose.models.Projet || mongoose.model<IProjet>('Projet', ProjetSchema);

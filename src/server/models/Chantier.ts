@@ -82,4 +82,4 @@ ChantierSchema.index({ statut: 1 });
 ChantierSchema.index({ numero_phase: 1 });
 ChantierSchema.index({ 'calendrier.date_debut_prevue': 1, 'calendrier.date_fin_prevue': 1 });
 
-export default mongoose.model<IChantier>('Chantier', ChantierSchema);
+export default mongoose.models.Chantier || mongoose.model<IChantier>('Chantier', ChantierSchema);

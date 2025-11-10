@@ -15,7 +15,8 @@ import {
   BarChart3, 
   FileText, 
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Calculator
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -65,6 +66,13 @@ const sidebarItems: SidebarItem[] = [
     roles: ['general_director', 'project_engineer', 'purchasing_manager', 'logistics_manager']
   },
   {
+    id: 'etude-quantitative',
+    icon: Calculator,
+    label: 'Étude Quantitative',
+    path: '/etude-quantitative',
+    roles: ['general_director', 'project_engineer', 'purchasing_manager', 'logistics_manager']
+  },
+  {
     id: 'reports',
     icon: FileText,
     label: 'Rapports',
@@ -92,8 +100,9 @@ const Sidebar: React.FC = () => {
   const { t } = useLanguage();
   const pathname = usePathname();
 
-  const filteredItems = sidebarItems.filter(item => 
-    user?.role && item.roles.includes(user.role)
+  const userRole = user?.role?.toLowerCase();
+  const filteredItems = sidebarItems.filter(item =>
+    userRole === 'admin' || (userRole ? item.roles.includes(userRole) : false)
   );
 
   const handleLogout = () => {
@@ -102,9 +111,9 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="fixed left-0 top-0 h-screen w-64 glass-sidebar z-50">
+    <div className="fixed left-0 top-0 h-screen w-64 glass-sidebar z-50 flex flex-col">
       {/* Logo Section */}
-      <div className="flex items-center justify-center h-16 border-b border-white/10">
+      <div className="flex items-center justify-center h-16 border-b border-white/10 flex-shrink-0">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
             <Building className="w-5 h-5 text-white" />
@@ -114,7 +123,7 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 px-4 py-6 space-y-2">
+      <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
         {filteredItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.path || pathname?.startsWith(item.path + '/');
@@ -149,7 +158,7 @@ const Sidebar: React.FC = () => {
       </nav>
 
       {/* User Profile Section */}
-      <div className="border-t border-white/10 p-4">
+      <div className="border-t border-white/10 p-4 flex-shrink-0">
         <div className="flex items-center space-x-3 p-3 rounded-xl bg-white/5">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
             <span className="text-white font-semibold text-sm">

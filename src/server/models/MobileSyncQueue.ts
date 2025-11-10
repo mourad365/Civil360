@@ -1,13 +1,23 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IMobileSyncQueue extends Document {
-  payload: any;
-  status?: string;
+  deviceId: string;
+  action: string;
+  entityType: string;
+  entityData?: any;
+  synced: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const MobileSyncQueueSchema: Schema = new Schema({
-  payload: { type: Schema.Types.Mixed },
-  status: { type: String }
+  deviceId: { type: String, required: true },
+  action: { type: String, required: true },
+  entityType: { type: String, required: true },
+  entityData: { type: Schema.Types.Mixed },
+  synced: { type: Boolean, default: false }
 }, { timestamps: true });
 
-export default mongoose.model<IMobileSyncQueue>('MobileSyncQueue', MobileSyncQueueSchema);
+MobileSyncQueueSchema.index({ synced: 1, createdAt: 1 });
+
+export default mongoose.models.MobileSyncQueue || mongoose.model<IMobileSyncQueue>('MobileSyncQueue', MobileSyncQueueSchema);

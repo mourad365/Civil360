@@ -30,4 +30,4 @@ const RoleSchema: Schema = new Schema({
 RoleSchema.index({ niveau_hierarchique: 1 });
 RoleSchema.index({ is_active: 1 });
 
-export default mongoose.model<IRole>('Role', RoleSchema);
+export default mongoose.models.Role || mongoose.model<IRole>('Role', RoleSchema);

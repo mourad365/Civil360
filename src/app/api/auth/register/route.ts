@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { mongoStorage } from '@/server/storage-mongo';
 import { generateToken } from '@/lib/auth-helpers';
+import UserModel from '@/server/models/User';
+import { initDB } from '@/lib/db-init';
 
 export async function POST(req: NextRequest) {
   try {
+    // Ensure DB connection (important in serverless/Netlify)
+    await initDB();
+
     const { username, password, name, role, email } = await req.json();
 
     // Validation
@@ -22,7 +26,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if user already exists
-    const existingUser = await mongoStorage.getUserByUsername(username);
+    const existingUser = await UserModel.findOne({ username });
     if (existingUser) {
       return NextResponse.json(
         { error: 'Username already exists' },
@@ -31,13 +35,14 @@ export async function POST(req: NextRequest) {
     }
 
     // Create new user
-    const newUser = await mongoStorage.createUser({
+    const newUser = new UserModel({
       username,
       password,
       name,
-      role: role || 'Chef de Chantier',
+      role: role || 'project_engineer',
       email
     });
+    await newUser.save();
 
     const token = generateToken(newUser);
 
@@ -45,7 +50,7 @@ export async function POST(req: NextRequest) {
       success: true,
       message: 'User registered successfully',
       user: {
-        id: newUser.id,
+        id: newUser._id,
         username: newUser.username,
         name: newUser.name,
         role: newUser.role,

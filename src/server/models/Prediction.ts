@@ -90,4 +90,4 @@ PredictionSchema.index({ predictionType: 1 });
 PredictionSchema.index({ createdAt: -1 });
 PredictionSchema.index({ validUntil: 1 });
 
-export default mongoose.model<IPrediction>('Prediction', PredictionSchema);
+export default mongoose.models.Prediction || mongoose.model<IPrediction>('Prediction', PredictionSchema);

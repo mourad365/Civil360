@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'standalone',
   
   async headers() {
     return [
@@ -17,7 +16,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self'",
-              "connect-src 'self' ws://localhost:*",
+              "connect-src 'self' ws://localhost:* https://*.mongodb.net",
               "frame-src 'none'",
               "object-src 'none'",
               "base-uri 'self'"

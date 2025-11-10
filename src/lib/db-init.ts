@@ -1,9 +1,20 @@
-import { connectDB } from '@/server/config/database';
+import mongoose, { connectDB, disconnectDB } from '@/server/config/database';
 
 let isConnected = false;
 
 export async function initDB() {
-  if (isConnected) {
+  const targetDbName = process.env.MONGODB_DB_NAME || 'civil360';
+  const currentDbName = (mongoose.connection as any)?.db?.databaseName;
+
+  // If connected to a different DB (like 'test'), reconnect to the correct one
+  if (currentDbName && currentDbName !== targetDbName) {
+    try {
+      await disconnectDB();
+    } catch {}
+    isConnected = false;
+  }
+
+  if (isConnected && currentDbName === targetDbName) {
     return;
   }
 

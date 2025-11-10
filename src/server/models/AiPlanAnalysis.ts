@@ -5,21 +5,25 @@ export interface IAiPlanAnalysis extends Document {
   fileName: string;
   fileSize?: number;
   fileType?: string;
-  status?: string;
+  status: 'processing' | 'completed' | 'failed' | 'queued';
   progress?: number;
   aiConfidence?: string;
   extractedData?: any;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const AiPlanAnalysisSchema: Schema = new Schema({
-  projectId: { type: Schema.Types.ObjectId, ref: 'Project' },
-  fileName: { type: String },
+  projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
+  fileName: { type: String, required: true, trim: true },
   fileSize: { type: Number },
   fileType: { type: String },
-  status: { type: String },
-  progress: { type: Number },
+  status: { type: String, enum: ['processing', 'completed', 'failed', 'queued'], default: 'processing' },
+  progress: { type: Number, min: 0, max: 100, default: 0 },
   aiConfidence: { type: String },
   extractedData: { type: Schema.Types.Mixed }
 }, { timestamps: true });
 
-export default mongoose.model<IAiPlanAnalysis>('AiPlanAnalysis', AiPlanAnalysisSchema);
+AiPlanAnalysisSchema.index({ projectId: 1, createdAt: -1 });
+
+export default mongoose.models.AiPlanAnalysis || mongoose.model<IAiPlanAnalysis>('AiPlanAnalysis', AiPlanAnalysisSchema);

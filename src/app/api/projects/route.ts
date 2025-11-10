@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, getAuthUser } from '@/lib/auth-helpers';
-import { mongoStorage } from '@/server/storage-mongo';
 import { insertProjectSchema } from '@shared/schema';
 import Project from '@/server/models/Project';
 
@@ -63,7 +62,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     
     const validatedData = insertProjectSchema.parse(body);
-    const project = await mongoStorage.createProject(validatedData);
+    const project = new Project(validatedData);
+    await project.save();
     
     return NextResponse.json(project, { status: 201 });
   } catch (error: any) {

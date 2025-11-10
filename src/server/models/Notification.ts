@@ -83,4 +83,4 @@ NotificationSchema.index({ category: 1 });
 NotificationSchema.index({ createdAt: -1 });
 NotificationSchema.index({ expiresAt: 1 });
 
-export default mongoose.model<INotification>('Notification', NotificationSchema);
+export default mongoose.models.Notification || mongoose.model<INotification>('Notification', NotificationSchema);

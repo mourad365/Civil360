@@ -44,7 +44,8 @@ const UserSchema: Schema = new Schema({
   password: {
     type: String,
     required: true,
-    minlength: 6
+    minlength: 6,
+    select: false
   },
   name: {
     type: String,
@@ -120,4 +121,4 @@ UserSchema.methods.toJSON = function() {
   return userObject;
 };
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);

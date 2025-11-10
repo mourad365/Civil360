@@ -149,4 +149,4 @@ MaterialSchema.index({ code: 1 });
 MaterialSchema.index({ category: 1, subcategory: 1 });
 MaterialSchema.index({ 'inventory.availableStock': 1 });
 
-export default mongoose.model<IMaterial>('Material', MaterialSchema);
+export default mongoose.models.Material || mongoose.model<IMaterial>('Material', MaterialSchema);

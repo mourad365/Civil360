@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
-import jwt from 'jsonwebtoken';
+
+import jwt, { type Secret, type SignOptions } from 'jsonwebtoken';
+import UserModel from '../server/models/User';
 import { initDB } from './db-init';
 
 export interface AuthUser {
@@ -64,14 +66,20 @@ export async function getAuthUser(req: NextRequest): Promise<AuthUser | null> {
     const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
     const decoded = jwt.verify(token, JWT_SECRET) as any;
 
+    const user = await UserModel.findById(decoded.id);
+
+    if (!user) {
+      return null;
+    }
+
     // If we have a valid token, return the info from the token as a lightweight fallback
     // (avoids importing server storage modules which may be missing in some environments)
     return {
-      id: decoded.id,
-      username: decoded.username || decoded.sub || 'unknown',
-      name: decoded.name || decoded.username || decoded.sub || 'Utilisateur',
-      role: decoded.role || 'user',
-      email: decoded.email || null
+      id: (user as any)._id.toString(),
+      username: user.username,
+      name: user.name,
+      role: user.role,
+      email: user.email ?? undefined
     };
   } catch (error) {
     return null;
@@ -89,17 +97,19 @@ export async function requireAuth(req: NextRequest): Promise<AuthUser> {
 }
 
 export function generateToken(user: any): string {
-  const JWT_SECRET = (process.env.JWT_SECRET || 'fallback-secret-key') as string;
-  const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+  const JWT_SECRET: Secret = process.env.JWT_SECRET ?? 'fallback-secret-key';
+  const JWT_EXPIRES_IN: SignOptions['expiresIn'] = (process.env.JWT_EXPIRES_IN ?? '7d') as SignOptions['expiresIn'];
+
+  const options: SignOptions = { expiresIn: JWT_EXPIRES_IN };
 
   return jwt.sign(
     {
       id: user.id,
       username: user.username,
       role: user.role
-    } as any,
-    JWT_SECRET as any,
-    { expiresIn: JWT_EXPIRES_IN } as any
+    },
+    JWT_SECRET,
+    options
   );
 }
 

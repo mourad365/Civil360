@@ -219,4 +219,4 @@ EquipmentSchema.index({ status: 1 });
 EquipmentSchema.index({ category: 1 });
 EquipmentSchema.index({ 'location.coordinates': '2dsphere' });
 
-export default mongoose.model<IEquipment>('Equipment', EquipmentSchema);
+export default mongoose.models.Equipment || mongoose.model<IEquipment>('Equipment', EquipmentSchema);
