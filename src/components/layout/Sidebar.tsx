@@ -86,6 +86,13 @@ const sidebarItems: SidebarItem[] = [
     path: '/team',
     roles: ['general_director', 'project_engineer', 'purchasing_manager', 'logistics_manager']
   },
+  {
+    id: 'personnel',
+    icon: Users,
+    label: 'Personnels',
+    path: '/personna',
+    roles: ['general_director', 'project_engineer', 'purchasing_manager', 'logistics_manager']
+  },
 ];
 
 const Sidebar: React.FC<{ collapsed?: boolean; isMobile?: boolean; mobileOpen?: boolean }> = ({ collapsed = false, isMobile = false, mobileOpen = false }) => {

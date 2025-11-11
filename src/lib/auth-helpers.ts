@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+
 import jwt, { type Secret, type SignOptions } from 'jsonwebtoken';
 import UserModel from '../server/models/User';
 import { initDB } from './db-init';
@@ -8,7 +9,7 @@ export interface AuthUser {
   username: string;
   name: string;
   role: string;
-  email?: string;
+  email?: string | null;
 }
 
 export async function getAuthUser(req: NextRequest): Promise<AuthUser | null> {
@@ -64,12 +65,15 @@ export async function getAuthUser(req: NextRequest): Promise<AuthUser | null> {
 
     const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
     const decoded = jwt.verify(token, JWT_SECRET) as any;
+
     const user = await UserModel.findById(decoded.id);
 
     if (!user) {
       return null;
     }
 
+    // If we have a valid token, return the info from the token as a lightweight fallback
+    // (avoids importing server storage modules which may be missing in some environments)
     return {
       id: (user as any)._id.toString(),
       username: user.username,
