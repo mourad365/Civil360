@@ -113,9 +113,9 @@ export default function PurchasingPage() {
                   date: '2024-01-18'
                 }
               ].map((order, index) => (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                <div key={index} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                   <div className="space-y-2 flex-1">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                       <h3 className="font-semibold">{order.id}</h3>
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         order.status === 'Livrée' 
@@ -129,7 +129,7 @@ export default function PurchasingPage() {
                         {order.status}
                       </span>
                     </div>
-                    <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                       <div className="flex items-center">
                         <Package className="h-3 w-3 mr-1" />
                         {order.supplier}
@@ -141,7 +141,7 @@ export default function PurchasingPage() {
                       Date: {new Date(order.date).toLocaleDateString('fr-FR')}
                     </div>
                   </div>
-                  <Button variant="outline" className="ml-4">
+                  <Button variant="outline" className="w-full sm:w-auto sm:ml-4 mt-2 sm:mt-0">
                     Voir Détails
                   </Button>
                 </div>

@@ -170,13 +170,13 @@ export default function ReportsPage() {
                   size: '1.2 MB'
                 }
               ].map((report, index) => (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                <div key={index} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                   <div className="flex items-center space-x-4 flex-1">
                     <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                       <FileText className="h-5 w-5 text-primary" />
                     </div>
                     <div className="space-y-1 flex-1">
-                      <div className="flex items-center space-x-3">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                         <h3 className="font-semibold">{report.title}</h3>
                         <span className={`text-xs px-2 py-1 rounded-full ${
                           report.status === 'Validé' 
@@ -186,18 +186,18 @@ export default function ReportsPage() {
                           {report.status}
                         </span>
                       </div>
-                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                         <span className="font-medium text-foreground">{report.type}</span>
                         <span>{new Date(report.date).toLocaleDateString('fr-FR')}</span>
                         <span>{report.size}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
+                  <div className="flex gap-2 w-full sm:w-auto sm:justify-end">
+                    <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
                       Voir
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
                       <Download className="h-4 w-4" />
                     </Button>
                   </div>

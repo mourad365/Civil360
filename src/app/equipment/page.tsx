@@ -121,9 +121,9 @@ export default function EquipmentPage() {
                   nextMaintenance: '2024-02-08'
                 }
               ].map((equipment, index) => (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                <div key={index} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                   <div className="space-y-2 flex-1">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                       <h3 className="font-semibold">{equipment.name}</h3>
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         equipment.status === 'En service' 
@@ -135,7 +135,7 @@ export default function EquipmentPage() {
                         {equipment.status}
                       </span>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
                       <div>
                         <span className="font-medium text-foreground">Catégorie:</span> {equipment.category}
                       </div>
@@ -150,7 +150,7 @@ export default function EquipmentPage() {
                       </div>
                     </div>
                   </div>
-                  <Button variant="outline" className="ml-4">
+                  <Button variant="outline" className="w-full sm:w-auto sm:ml-4 mt-2 sm:mt-0">
                     Gérer
                   </Button>
                 </div>

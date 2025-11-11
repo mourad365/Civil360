@@ -10,7 +10,9 @@ import {
   User, 
   Menu,
   Globe,
-  ChevronDown
+  ChevronDown,
+  ChevronsLeft,
+  ChevronsRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,9 +28,11 @@ import { Badge } from '@/components/ui/badge';
 interface NavbarProps {
   title?: string;
   onMenuToggle?: () => void;
+  onCollapseToggle?: () => void;
+  isCollapsed?: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ title = "Dashboard", onMenuToggle }) => {
+const Navbar: React.FC<NavbarProps> = ({ title = "Dashboard", onMenuToggle, onCollapseToggle, isCollapsed }) => {
   const { user, logout } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
@@ -52,6 +56,20 @@ const Navbar: React.FC<NavbarProps> = ({ title = "Dashboard", onMenuToggle }) =>
             className="md:hidden"
           >
             <Menu className="w-5 h-5" />
+          </Button>
+
+          {/* Desktop Collapse Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onCollapseToggle}
+            className="hidden md:inline-flex"
+          >
+            {isCollapsed ? (
+              <ChevronsRight className="w-5 h-5" />
+            ) : (
+              <ChevronsLeft className="w-5 h-5" />
+            )}
           </Button>
 
           {/* Page Title */}

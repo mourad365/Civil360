@@ -100,7 +100,7 @@ export default function TeamPage() {
                 }
               ].map((team, index) => (
                 <div key={index} className="p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                     <div>
                       <h3 className="font-semibold">{team.project}</h3>
                       <p className="text-sm text-muted-foreground">Chef d'équipe: {team.leader}</p>
@@ -110,7 +110,7 @@ export default function TeamPage() {
                       <p className="text-xs text-muted-foreground">membres</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       <span className="text-muted-foreground">Ingénieurs:</span>
@@ -177,7 +177,7 @@ export default function TeamPage() {
                   rating: 4.6
                 }
               ].map((member, index) => (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                <div key={index} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                   <div className="flex items-center space-x-4 flex-1">
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
                       <span className="text-black font-semibold text-lg">
@@ -195,7 +195,7 @@ export default function TeamPage() {
                           {member.status}
                         </span>
                       </div>
-                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                         <span className="font-medium text-foreground">{member.role}</span>
                         <span>{member.project}</span>
                         <div className="flex items-center">
@@ -205,7 +205,7 @@ export default function TeamPage() {
                       </div>
                     </div>
                   </div>
-                  <Button variant="outline">
+                  <Button variant="outline" className="w-full sm:w-auto sm:ml-4 mt-2 sm:mt-0">
                     Voir Profil
                   </Button>
                 </div>

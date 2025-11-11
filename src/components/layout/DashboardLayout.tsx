@@ -11,14 +11,15 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) => {
   const { user } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
       if (window.innerWidth < 768) {
-        setSidebarOpen(false);
+        setMobileOpen(false);
       }
     };
 
@@ -28,22 +29,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) =>
   }, []);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    if (isMobile) {
+      setMobileOpen((v) => !v);
+    } else {
+      setCollapsed((v) => !v);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Sidebar */}
-      <div className={cn(
-        "transition-transform duration-300 ease-in-out",
-        sidebarOpen ? "translate-x-0" : "-translate-x-full",
-        isMobile && "fixed inset-y-0 left-0 z-50"
-      )}>
-        <Sidebar />
-      </div>
+      <Sidebar collapsed={!isMobile && collapsed} isMobile={isMobile} mobileOpen={mobileOpen} />
 
       {/* Mobile Overlay */}
-      {isMobile && sidebarOpen && (
+      {isMobile && mobileOpen && (
         <div 
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
           onClick={toggleSidebar}
@@ -51,15 +50,22 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) =>
       )}
 
       {/* Main Content Area */}
-      <div className={cn(
-        "flex flex-col min-h-screen transition-all duration-300",
-        !isMobile && sidebarOpen ? "ml-64" : "ml-0"
-      )}>
+      <div
+        className={cn(
+          "flex flex-col min-h-screen transition-all duration-300",
+          !isMobile ? (collapsed ? "ml-16" : "ml-64") : "ml-0"
+        )}
+      >
         {/* Navigation Bar */}
-        <Navbar title={title} onMenuToggle={toggleSidebar} />
+        <Navbar
+          title={title}
+          onMenuToggle={toggleSidebar}
+          onCollapseToggle={() => setCollapsed((v) => !v)}
+          isCollapsed={!isMobile && collapsed}
+        />
         
         {/* Page Content */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-4 md:p-6 overflow-auto">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>

@@ -88,7 +88,7 @@ const sidebarItems: SidebarItem[] = [
   },
 ];
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ collapsed?: boolean; isMobile?: boolean; mobileOpen?: boolean }> = ({ collapsed = false, isMobile = false, mobileOpen = false }) => {
   const { user, logout } = useAuth();
   const { t } = useLanguage();
   const pathname = usePathname();
@@ -104,19 +104,25 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="fixed left-0 top-0 h-screen w-64 glass-sidebar z-50 flex flex-col">
+    <div
+      className={cn(
+        "fixed left-0 top-0 h-screen glass-sidebar z-50 flex flex-col transition-transform duration-300 ease-in-out",
+        collapsed ? "w-16" : "w-64",
+        isMobile ? (mobileOpen ? "translate-x-0" : "-translate-x-full") : "translate-x-0"
+      )}
+    >
       {/* Logo Section */}
       <div className="flex items-center justify-center h-16 border-b border-white/10 flex-shrink-0">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
             <Building className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-bold text-white">CIVIL360</span>
+          <span className={cn("text-xl font-bold text-white", collapsed ? "hidden" : "inline-block")}>CIVIL360</span>
         </div>
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+      <nav className={cn("flex-1 py-6 space-y-2 overflow-y-auto", collapsed ? "px-2" : "px-4") }>
         {filteredItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.path || pathname?.startsWith(item.path + '/');
@@ -124,7 +130,8 @@ const Sidebar: React.FC = () => {
           return (
             <Link key={item.id} href={item.path}>
               <div className={cn(
-                "flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200",
+                "flex items-center rounded-xl transition-all duration-200",
+                collapsed ? "justify-center px-2 py-3" : "px-4 py-3 space-x-3",
                 "hover:bg-white/10 hover:translate-x-1 group",
                 isActive 
                   ? "bg-white/15 text-white shadow-lg" 
@@ -134,15 +141,16 @@ const Sidebar: React.FC = () => {
                   "w-5 h-5 transition-colors",
                   isActive ? "text-blue-400" : "text-white/70 group-hover:text-blue-400"
                 )} />
-                <span className="font-medium flex-1">{item.label}</span>
+                <span className={cn("font-medium flex-1", collapsed ? "hidden" : "block")}>{item.label}</span>
                 {item.badge && (
-                  <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                  <span className={cn("bg-red-500 text-white text-xs px-2 py-0.5 rounded-full", collapsed ? "hidden" : "inline-block") }>
                     {item.badge}
                   </span>
                 )}
                 <ChevronRight className={cn(
                   "w-4 h-4 transition-all opacity-0 group-hover:opacity-100",
-                  isActive && "opacity-100"
+                  isActive && "opacity-100",
+                  collapsed && "hidden"
                 )} />
               </div>
             </Link>
@@ -152,31 +160,29 @@ const Sidebar: React.FC = () => {
 
       {/* User Profile Section */}
       <div className="border-t border-white/10 p-4 flex-shrink-0">
-        <div className="flex items-center space-x-3 p-3 rounded-xl bg-white/5">
+        <div className={cn("flex items-center p-3 rounded-xl bg-white/5", collapsed ? "justify-center" : "space-x-3") }>
           <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
             <span className="text-white font-semibold text-sm">
               {user?.name?.charAt(0) || 'U'}
             </span>
           </div>
-          <div className="flex-1">
+          <div className={cn("flex-1", collapsed ? "hidden" : "block")}>
             <p className="text-white font-medium text-sm">{user?.name}</p>
-            <p className="text-white/60 text-xs capitalize">
-              {user?.role?.replace('_', ' ')}
-            </p>
+            <p className="text-white/60 text-xs capitalize">{user?.role?.replace('_', ' ')}</p>
           </div>
         </div>
         
         <div className="mt-3 space-y-1">
-          <button className="flex items-center space-x-3 w-full px-4 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+          <button className={cn("flex items-center w-full text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors", collapsed ? "justify-center p-2" : "space-x-3 px-4 py-2") }>
             <Settings className="w-4 h-4" />
-            <span className="text-sm">Paramètres</span>
+            <span className={cn("text-sm", collapsed ? "hidden" : "inline")}>Paramètres</span>
           </button>
           <button 
             onClick={handleLogout}
-            className="flex items-center space-x-3 w-full px-4 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            className={cn("flex items-center w-full text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors", collapsed ? "justify-center p-2" : "space-x-3 px-4 py-2")}
           >
             <LogOut className="w-4 h-4" />
-            <span className="text-sm">Déconnexion</span>
+            <span className={cn("text-sm", collapsed ? "hidden" : "inline")}>Déconnexion</span>
           </button>
         </div>
       </div>
